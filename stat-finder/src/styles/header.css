@@ -1,0 +1,35 @@
+.container {
+    font-family: "Roboto", sans-serif;
+    font-size: large;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nba-logo {
+    margin-right: 30px;
+}
+
+.dropdown {
+    height: 2.5em;
+    margin-left: 30px;
+}
+
+.container ul {
+    list-style: none;
+    border-radius: 25px;
+    background-color: rgb(62, 58, 58);
+}
+
+li {
+    float: right;
+    padding: 1em;
+    padding-right: 4em;
+    text-align: center;
+}
+
+img {
+    height: 5em;
+}
+
