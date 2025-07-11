@@ -1,0 +1,27 @@
+.tagline {
+    padding: 60px;
+    padding-bottom: 200px;
+    text-align: center;
+}
+
+.tagline h1 {
+    font-size: 90px;
+    font-weight: 150;
+    text-shadow: 1px 2px 2px #223677;
+}
+
+.tagline h3 {
+    font-weight: 300;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.landing-container {
+    display: flex;
+}
+
+p {
+    max-width: 50%;
+}

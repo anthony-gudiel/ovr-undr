@@ -5,6 +5,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 300;
+    /* position: sticky;
+    top: 0; */
 }
 
 .nba-logo {
@@ -18,8 +21,13 @@
 
 .container ul {
     list-style: none;
-    border-radius: 25px;
+    margin-top: 0px;
+}
+
+nav {
     background-color: rgb(62, 58, 58);
+    border-radius: 25px;
+    
 }
 
 li {
