@@ -20,7 +20,7 @@ p {
     padding: 40px;
     line-height: 2;
     font-weight: 250;
-    box-shadow: 7px 7px;
+    box-shadow: 7px 7px 0px rgba(0, 0, 0, 0.2);
     margin-left: 20px;
 
 }
