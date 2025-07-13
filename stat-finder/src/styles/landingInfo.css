@@ -1,0 +1,26 @@
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    /* border: 10px solid black; */
+}
+
+p {
+    text-align: center;
+    /* border: 10px solid purple; */
+    width: 50%;
+    height: fit-content;
+    font-size: x-large;
+    border-radius: 25px;
+}
+
+.text-side {
+    background-color: #8d8eb4;
+    padding: 40px;
+    line-height: 2;
+    font-weight: 250;
+    box-shadow: 7px 7px 0px rgba(0, 0, 0, 0.2);
+    margin-left: 20px;
+
+}
