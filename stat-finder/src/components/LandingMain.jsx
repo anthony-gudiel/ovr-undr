@@ -1,6 +1,7 @@
 import "../styles/landingMain.css"
 import search from "../assets/search-icon.png"
 import LandingInfo from "./LandingInfo"
+import Footer from "./Footer"
 
 export default function LandingMain() {
     return (
@@ -32,6 +33,7 @@ export default function LandingMain() {
                 side={true}
                 image='this is an image'
             />
+            <Footer />
         </main>
     )
 }
