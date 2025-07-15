@@ -24,13 +24,13 @@ export default function PlayerStats() {
                 </div>
 
 
-                <div className='stats-container' id='filter'>
+                <div className='stats-container' id='filter-1'>
                     <div className='stats'>
                         <p>This is where the user will be able to filter results based on different criteria</p>
                     </div>
                 </div>
 
-                <div className='stats-container' id='filter'>
+                <div className='stats-container' id='filter-2'>
                     <div className='stats'>
                         <p>This is where the user will be able to filter results based on different criteria</p>
                     </div>
