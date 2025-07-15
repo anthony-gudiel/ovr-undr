@@ -24,3 +24,29 @@ dist-ssr
 *.sw?
 
 .vite/
+
+# Virtual environment
+src/python/.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Output files
+*.csv
+
+# Environment files
+.env
+
+# IDE settings
+.vscode/
+.idea/
