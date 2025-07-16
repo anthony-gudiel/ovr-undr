@@ -14,15 +14,18 @@
 }
 
 .tagline {
+    color: white;
     padding: 60px;
     padding-bottom: 130px;
     text-align: center;
-    background-image: url('../assets/layered-waves-haikei.svg');
+    background-image: url('../assets/pexels-markusspiske-1752757.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 30px;
     border-bottom: 10px solid black;
     border-top: 10px solid black;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-blend-mode: overlay;
 }
 
 .submit-button {
@@ -63,4 +66,16 @@ body {
 footer {
     text-align: center;
     margin: 40px 0;
+}
+
+.features {
+    margin-top: 0px;
+    background-image: url('../assets/layered-waves-haikei.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.gradient-transition {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
+    height: 50px;
 }
