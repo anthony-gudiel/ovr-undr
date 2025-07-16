@@ -13,7 +13,7 @@ export default function LandingMain() {
                 <Search />
             </div>
 
-            <div class="gradient-transition"></div>
+            <div className="gradient-transition"></div>
 
             <div className="features">
                 <LandingInfo 
