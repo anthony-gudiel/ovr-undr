@@ -12,24 +12,29 @@ export default function LandingMain() {
                 highlighting how players have performed against the line in recent games.</h3>
                 <Search />
             </div>
-            <LandingInfo 
-                headline='Track Player Performance Against Betting Lines'
-                text='Easily see how NBA players perform compared to their betting lines. Just search for a player, choose how many past games you want to look at, and instantly see whether they went over or under. We keep it simple—just the info you need to make smarter picks.'
-                side={true}
-                image='this is an image'
-            />
-            <LandingInfo
-                headline='Filter by Opponent, Minutes Played, and More'
-                text='Want to know how a player does against a specific team? Or only when they play heavy minutes? Use our filters to dig deeper. You can narrow results by opponent, minutes played, and other key stats, so you’re not just seeing raw numbers—you’re seeing the full picture.'
-                side={false}
-                image='this is an image'
-            />
-            <LandingInfo
-                headline='Visualize the Data with Clean, Interactive Graphs'
-                text="No need to stare at a spreadsheet. We turn the numbers into clear, interactive graphs so trends pop out at a glance. Whether you're researching for fantasy, betting, or just curious, you’ll get quick insights that make sense."
-                side={true}
-                image='this is an image'
-            />
+
+            <div class="gradient-transition"></div>
+
+            <div className="features">
+                <LandingInfo 
+                    headline='Track Player Performance Against Betting Lines'
+                    text='Easily see how NBA players perform compared to their betting lines. Just search for a player, choose how many past games you want to look at, and instantly see whether they went over or under. We keep it simple—just the info you need to make smarter picks.'
+                    side={true}
+                    image='this is an image'
+                />
+                <LandingInfo
+                    headline='Filter by Opponent, Minutes Played, and More'
+                    text='Want to know how a player does against a specific team? Or only when they play heavy minutes? Use our filters to dig deeper. You can narrow results by opponent, minutes played, and other key stats, so you’re not just seeing raw numbers—you’re seeing the full picture.'
+                    side={false}
+                    image='this is an image'
+                />
+                <LandingInfo
+                    headline='Visualize the Data with Clean, Interactive Graphs'
+                    text="No need to stare at a spreadsheet. We turn the numbers into clear, interactive graphs so trends pop out at a glance. Whether you're researching for fantasy, betting, or just curious, you’ll get quick insights that make sense."
+                    side={true}
+                    image='this is an image'
+                />
+            </div>
             <Footer />
         </main>
     )
