@@ -17,9 +17,9 @@ const config = {
 app.get('/api/player', async (req, res) => {
     console.log('Request received:', req.query);
     const client = new Client(config);
-    await client.connect();
 
     try {
+        await client.connect();
 
         if (!req.query.name) {
             return res.status(400).json({ error: 'Player name is required' });
