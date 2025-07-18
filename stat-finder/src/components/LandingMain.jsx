@@ -4,13 +4,36 @@ import Footer from "./Footer"
 import Search from "./Search"
 
 export default function LandingMain() {
+
+    async function handleSearch(event) {
+        event.preventDefault();
+        // console.log('handleSearch entered');
+        const userPlayerSearch = 'Lebron_James';
+        const url = `http://localhost:5000/api/player?name=${userPlayerSearch}`;
+        
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error (`Response Status: ${response.status}`);
+            }
+
+            const json = await response.json();
+            console.log(json);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     return (
         <main>
             <div className="tagline">
                 <h1>Do yourself a favour by making more informed bets.</h1>
                 <h3>Most bets are made on gut feeling. We help you back it up with real trends by
                 highlighting how players have performed against the line in recent games.</h3>
-                <Search />
+                <Search 
+                    onClick = {handleSearch}
+                />
             </div>
 
             <div className="gradient-transition"></div>
