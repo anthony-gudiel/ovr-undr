@@ -58,7 +58,12 @@ app.get('/api/player', async (req, res) => {
         res.json(result.rows);
     
     } catch(err) {
-        console.log(err);
+        console.error('Error occurred:', {
+            error: err.message,
+            stack: err.stack,
+            requestParams: req.query,
+            queryDetails: { query, params }
+        });
         res.status(500).json({ error: err.message });
     } finally {
         await client.end();
