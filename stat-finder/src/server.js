@@ -18,6 +18,9 @@ const config = {
 app.get('/api/player', async (req, res) => {
     console.log('Request received:', req.query);
     const client = new Client(config);
+    let query = 'SELECT * FROM players WHERE "Name" = $1';
+    const params = [req.query.name];
+    let index = 2;
 
     try {
         await client.connect();
@@ -25,10 +28,6 @@ app.get('/api/player', async (req, res) => {
         if (!req.query.name) {
             return res.status(400).json({ error: 'Player name is required' });
         }
-
-        let query = 'SELECT * FROM players WHERE "Name" = $1';
-        const params = [req.query.name];
-        let index = 2;
 
         if (req.query.minutes){
             console.log('minutes if entered')
