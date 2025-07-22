@@ -13,7 +13,7 @@ export default function LandingMain() {
         // console.log(formData);
         // console.log('handleSearch entered');
         const userPlayerSearch = formData.get("player-search");
-        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${userPlayerSearch}`;        
+        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;        
         formElement.reset();
         
         try {
