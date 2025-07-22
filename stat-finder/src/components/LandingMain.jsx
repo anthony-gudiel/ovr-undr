@@ -2,8 +2,14 @@ import "../styles/landingMain.css"
 import LandingInfo from "./LandingInfo"
 import Footer from "./Footer"
 import Search from "./Search"
+import { Toaster, toast } from 'sonner'
+
 
 export default function LandingMain() {
+
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
 
     async function handleSearch(event) {
 
@@ -25,13 +31,20 @@ export default function LandingMain() {
             const json = await response.json();
             console.log(json);
 
+            if (isEmpty(json)) {
+                toast.error("No players matching that name were found. Please check your spelling or try a different name.");
+            }
+
         } catch (error) {
             console.log(error.message);
+            toast.error('Something went wrong. Please try again.');
         }
     }
 
     return (
+        
         <main>
+            <Toaster richColors position="top-center"/>
             <div className="tagline">
                 <h1>Do yourself a favour by making more informed bets.</h1>
                 <h3>Most bets are made on gut feeling. We help you back it up with real trends by
