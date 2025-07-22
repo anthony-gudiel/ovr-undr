@@ -6,10 +6,15 @@ import Search from "./Search"
 export default function LandingMain() {
 
     async function handleSearch(event) {
+
         event.preventDefault();
+        const formElement = event.currentTarget;
+        const formData = new FormData(formElement);
+        // console.log(formData);
         // console.log('handleSearch entered');
-        const userPlayerSearch = 'Lebron_James';
-        const url = `http://localhost:5000/api/player?name=${userPlayerSearch}`;
+        const userPlayerSearch = formData.get("player-search");
+        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;        
+        formElement.reset();
         
         try {
             const response = await fetch(url);
