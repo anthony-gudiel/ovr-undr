@@ -14,12 +14,25 @@ export default function LandingMain() {
     async function handleSearch(event) {
 
         event.preventDefault();
+
         const formElement = event.currentTarget;
         const formData = new FormData(formElement);
         // console.log(formData);
         // console.log('handleSearch entered');
-        const userPlayerSearch = formData.get("player-search");
+        
+        let userPlayerSearch = formData.get("player-search");
+        const spaceIndex = (userPlayerSearch.indexOf(" "));
+
+        userPlayerSearch = userPlayerSearch[0].toUpperCase() 
+            + userPlayerSearch.substring(1, spaceIndex + 1)
+            + userPlayerSearch[spaceIndex + 1].toUpperCase() 
+            + userPlayerSearch.substring(spaceIndex + 2, userPlayerSearch.length);
+            
+        userPlayerSearch = userPlayerSearch.substring(0, spaceIndex) + '_' 
+            + userPlayerSearch.substring(spaceIndex + 1, userPlayerSearch.length);        
+
         const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;        
+
         formElement.reset();
         
         try {
