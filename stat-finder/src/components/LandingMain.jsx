@@ -23,6 +23,10 @@ export default function LandingMain() {
         let userPlayerSearch = formData.get("player-search");
         const spaceIndex = (userPlayerSearch.indexOf(" "));
 
+        if (spaceIndex === -1) {
+            toast.error("Please enter a first and last name separated by a space.");
+            return;
+        }
         userPlayerSearch = userPlayerSearch[0].toUpperCase() 
             + userPlayerSearch.substring(1, spaceIndex + 1)
             + userPlayerSearch[spaceIndex + 1].toUpperCase() 
