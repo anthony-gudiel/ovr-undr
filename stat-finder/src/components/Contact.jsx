@@ -1,5 +1,7 @@
 export default function Contact() {
-    <>
-        This is the contact page.
-    </>
+    return (
+        <>
+            This is the contact page.
+        </>
+    )
 }

@@ -1,5 +1,7 @@
 export default function About() {
-    <>
-        This is the about page.
-    </>
+    return (
+        <>
+            This is the about page.
+        </>
+    )
 }

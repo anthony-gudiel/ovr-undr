@@ -1,5 +1,8 @@
 export default function Error() {
-    <>
-        This is the error page.
-    </>
+    return (
+        <>
+            This is the error page.
+        </>
+    )
+
 }
