@@ -3,9 +3,11 @@ import LandingInfo from "./LandingInfo"
 import Footer from "./Footer"
 import Search from "./Search"
 import { Toaster, toast } from 'sonner'
-
+import { useNavigate } from "react-router-dom"
 
 export default function LandingMain() {
+
+    const navigate = useNavigate();
 
     function isEmpty(obj) {
         return Object.keys(obj).length === 0;
@@ -25,8 +27,10 @@ export default function LandingMain() {
 
         if (spaceIndex === -1) {
             toast.error("Please enter a first and last name separated by a space.");
+            formElement.reset();
             return;
         }
+
         userPlayerSearch = userPlayerSearch[0].toUpperCase() 
             + userPlayerSearch.substring(1, spaceIndex + 1)
             + userPlayerSearch[spaceIndex + 1].toUpperCase() 
@@ -50,6 +54,8 @@ export default function LandingMain() {
 
             if (isEmpty(json)) {
                 toast.error("No players matching that name were found. Please check your spelling or try a different name.");
+            } else {
+                navigate('/player-stats')
             }
 
         } catch (error) {
