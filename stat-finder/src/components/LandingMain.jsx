@@ -4,6 +4,7 @@ import Footer from "./Footer"
 import Search from "./Search"
 import { Toaster, toast } from 'sonner'
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 export default function LandingMain() {
 
@@ -50,12 +51,12 @@ export default function LandingMain() {
             }
 
             const json = await response.json();
-            console.log(json);
+            // console.log(json);
 
             if (isEmpty(json)) {
                 toast.error("No players matching that name were found. Please check your spelling or try a different name.");
             } else {
-                navigate('/player-stats')
+                navigate('/player-stats', {state: {playerData: json}});
             }
 
         } catch (error) {
