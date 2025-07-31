@@ -4,13 +4,14 @@ main {
 }
 
 .headshot {
-    height: 240px;
-    border-radius: 25px;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
-    transform: translateY(-5px);
-    padding: 30px;
-    background-color: #ffffff;
-
+    width: 200px;       
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    margin-top: -100px;
+    margin-bottom: 60px;
 }
 
 .player-card {
@@ -51,6 +52,56 @@ main {
     margin-bottom: 30px;
 }
 
-#filter-1, #filter-2 {
+.stats-controls{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.neu-button {
+  background-color: #e0e0e0;
+  border-radius: 50px;
+  box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
+  color: #4d4d4d;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 15px 40px;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid rgb(206, 206, 206);
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.neu-button:hover {
+  box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
+}
+
+.neu-button:focus {
+  outline: none;
+  box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
+}
+
+.headshot + .headshot {
+    margin-left: -40px;
+    z-index: 1;
+}
+
+#chart {
+    width: 1200px;
+    height: 400px;
+    max-width: 100%;
+    max-height: 100%;
+    border: 10px solid black;
+
+}
+
+#buttons {
+    background-color: white;
+    box-shadow: none;
+    border: none;
+}
+
+#buttons, #filter-2 {
     margin-top: 20px;
 }
