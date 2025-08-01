@@ -14,7 +14,6 @@ defaults.color = '#FFFFFF'
 
 export default function PlayerStats() {
     
-    console.log("Player stats rendered.");
     const { state } = useLocation();
     let playerData = state.playerData;
     let newPlayerData = playerData.filter(data => data.Gcar !== null);
