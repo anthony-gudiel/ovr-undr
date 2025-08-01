@@ -4,6 +4,7 @@ import { Outlet, Link } from 'react-router-dom'
 import Search from './Search.jsx'
 
 export default function Header(props) {
+    console.log("Header rendered.")
 
     return (
         <header className='container'>

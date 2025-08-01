@@ -1,6 +1,9 @@
 import '../styles/landingInfo.css'
 
 export default function LandingInfo (props) {
+
+    console.log("Landing page info rendered.");
+
     return (
         <section>
             <p className={ props.side ? 'text-side' : 'image-side'}>

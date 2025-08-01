@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function LandingMain(props) {
     
+    console.log("Landing page main rendered.");
 
     return (
         
