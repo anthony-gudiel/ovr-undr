@@ -13,7 +13,7 @@ defaults.responsive = true;
 defaults.color = '#FFFFFF'
 
 export default function PlayerStats() {
-
+    
     const { state } = useLocation();
     let playerData = state.playerData;
     let newPlayerData = playerData.filter(data => data.Gcar !== null);

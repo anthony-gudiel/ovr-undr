@@ -1,10 +1,9 @@
 import '../styles/header.css'
 import logo from '../assets/logo.png'
-import dropdown from '../assets/dropdown.png'
 import { Outlet, Link } from 'react-router-dom'
+import Search from './Search.jsx'
 
-export default function Header() {
-
+export default function Header(props) {
     return (
         <header className='container'>
             <img src={logo} alt="Logo" className='nba-logo' />
@@ -25,7 +24,9 @@ export default function Header() {
                 </ul>
             </nav>
             <Outlet />
-            <img src={dropdown} alt="Dropdown icon" className='dropdown'/>
+                <div className='small-search'>
+                    <Search onClick={props.handleSearch}/>
+                </div>
         </header>
     )
 }

@@ -8,15 +8,29 @@
     font-weight: 300;
     /* position: sticky;
     top: 0; */
-}
+ }
 
 .nba-logo {
-    margin-right: 30px;
+    position: absolute;
+    top: 0;
+    left: 10%;
+    margin-top: 10px;
 }
 
-.dropdown {
-    height: 2.5em;
-    margin-left: 30px;
+.small-search {
+    max-width: 350px; /* or your preferred width */
+    font-size: 0.85em; /* scale down text if needed */
+    margin-left: 40px;
+    position: absolute;
+    top: 0;
+    left: 73%;
+    margin-top: -20px;
+}
+
+.small-search input,
+.small-search button {
+    font-size: 0.85em;
+    padding: 8px 12px;
 }
 
 .container ul {
@@ -27,6 +41,11 @@
 nav {
     background-color: #212225;
     border-radius: 25px;
+    position: absolute;
+    top: 0;
+    left: 30%;
+    margin-top: 30px;
+    margin-left: -20px;
 }
 
 li {
