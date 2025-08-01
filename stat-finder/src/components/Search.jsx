@@ -2,7 +2,6 @@ import search from "../assets/search-icon.png"
 
 export default function Search(props) {
 
-    console.log('Search bar rendered');
 
     return (
         <form onSubmit={props.onClick}>
