@@ -1,7 +1,7 @@
 import '../styles/stats.css'
 import Footer from './Footer'
 import Search from './Search'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, defaults} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -15,9 +15,8 @@ defaults.color = '#FFFFFF'
 export default function PlayerStats() {
 
     const { state } = useLocation();
-    const playerData = state.playerData;
-    const newPlayerData = playerData.filter(data => data.Gcar !== null)
-
+    let playerData = state.playerData;
+    let newPlayerData = playerData.filter(data => data.Gcar !== null);
     const [pageNum, setPageNum] = useState(1);
 
     function handlePrev() {
@@ -49,11 +48,11 @@ export default function PlayerStats() {
 
     return (
         <main>
-            <h2 className='stats-header'>Scottie Barnes Performance History</h2>
+            <h2 className='stats-header'>{newPlayerData[0].Name.replace('_', ' ')} Performance History</h2>
             <div className='player-card'>
-                <img src='https://www.basketball-reference.com/req/202106291/images/headshots/barnesc01.jpg'
+                <img src={`https://www.basketball-reference.com/req/202106291/images/headshots/${newPlayerData[0].pID}.jpg`}
                 alt="Player headshot" className='headshot'/>
-                <img src='https://cdn.ssref.net/req/202507211/tlogo/bbr/TOR.png'
+                <img src={`https://cdn.ssref.net/req/202507211/tlogo/bbr/${newPlayerData[0].Team}.png`}
                 alt="Player headshot" className='headshot'/>
                 
                 <div className='stats-container' id='chart'>

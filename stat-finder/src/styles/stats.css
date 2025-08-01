@@ -4,14 +4,14 @@ main {
 }
 
 .headshot {
-    width: 200px;       
-    height: 200px;
+    width: 150px;       
+    height: 150px;
     object-fit: cover;
     border-radius: 50%;
     border: 6px solid #fff;
     box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-    margin-top: -100px;
-    margin-bottom: 60px;
+    margin-top: -50px;
+    margin-bottom: 100px;
 }
 
 .player-card {
@@ -50,6 +50,7 @@ main {
 .stats-header {
     font-size: 60px;
     margin-bottom: 30px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5); 
 }
 
 .stats-controls{

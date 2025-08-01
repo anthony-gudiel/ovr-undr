@@ -4,10 +4,9 @@ import Footer from "./Footer"
 import Search from "./Search"
 import { Toaster, toast } from 'sonner'
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
 
 export default function LandingMain() {
-
+    
     const navigate = useNavigate();
 
     function isEmpty(obj) {
@@ -20,9 +19,10 @@ export default function LandingMain() {
 
         const formElement = event.currentTarget;
         const formData = new FormData(formElement);
+
         // console.log(formData);
-        // console.log('handleSearch entered');
-        
+        // console.log('handleSearch entered')
+
         let userPlayerSearch = formData.get("player-search");
         const spaceIndex = (userPlayerSearch.indexOf(" "));
 
@@ -36,9 +36,9 @@ export default function LandingMain() {
             + userPlayerSearch.substring(1, spaceIndex + 1)
             + userPlayerSearch[spaceIndex + 1].toUpperCase() 
             + userPlayerSearch.substring(spaceIndex + 2, userPlayerSearch.length);
-            
+       
         userPlayerSearch = userPlayerSearch.substring(0, spaceIndex) + '_' 
-            + userPlayerSearch.substring(spaceIndex + 1, userPlayerSearch.length);        
+        + userPlayerSearch.substring(spaceIndex + 1, userPlayerSearch.length);        
 
         const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;        
 
