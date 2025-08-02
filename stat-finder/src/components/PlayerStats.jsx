@@ -59,12 +59,13 @@ export default function PlayerStats() {
                     <div className='stats'>
                         <Bar 
                             data={{
-                                labels: newPlayerData.slice((pageNum * 10) - 10, pageNum * 10).map((data) => data.Date),
+                                labels: newPlayerData.slice((newPlayerData.length) - (10 * pageNum), (newPlayerData.length) - (10 * (pageNum - 1)))
+                                .map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
                                 datasets : [
                                     {
                                         label: "PTS",
-                                        data: newPlayerData.slice((pageNum * 10) - 10, pageNum * 10).map(data => data.PTS),
-                                        backgroundColor: newPlayerData.slice((pageNum * 10) - 10, pageNum * 10).map(data => data.PTS > 19 ? "green" 
+                                        data: newPlayerData.slice((newPlayerData.length) - (10 * pageNum), (newPlayerData.length) - (10 * (pageNum - 1))).map(data => data.PTS),
+                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (10 * pageNum), (newPlayerData.length) - (10 * (pageNum - 1))).map(data => data.PTS > 19 ? "green" 
                                            : data.PTS == 19 ? "gray" 
                                            : "red"),
                                     }
@@ -104,8 +105,8 @@ export default function PlayerStats() {
                 <div className='stats-controls'>
                     <div className='stats-container' id='buttons'>
                         <div className='pagination'>
-                            <button className='neu-button' onClick={handlePrev}>Prev 10</button>
-                            <button className='neu-button' onClick={handleNext}>Next 10</button>
+                            <button className='neu-button' onClick={handleNext}>Prev 10</button>
+                            <button className='neu-button' onClick={handlePrev}>Next 10</button>
                         </div>
                     </div>
                 </div>
