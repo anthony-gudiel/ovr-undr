@@ -72,7 +72,6 @@ function App() {
 
       <Toaster richColors position="top-center"/>
       <Header handleSearch={handleSearch} />
-      <div style={{ height: "50px" }} /> 
         <Routes>
           <Route index element={<Landing handleSearch={handleSearch} />} />
           <Route path="/player-stats" element={<PlayerStats />} />
