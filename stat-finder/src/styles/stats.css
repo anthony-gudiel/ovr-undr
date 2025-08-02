@@ -75,29 +75,6 @@ main {
     width: 100%;
 }
 
-.neu-button {
-  background-color: #e0e0e0;
-  border-radius: 50px;
-  box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
-  color: #4d4d4d;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 15px 40px;
-  transition: all 0.2s ease-in-out;
-  border: 2px solid rgb(206, 206, 206);
-  margin-left: 20px;
-  margin-top: 20px;
-}
-
-.neu-button:hover {
-  box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
-}
-
-.neu-button:focus {
-  outline: none;
-  box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
-}
-
 .headshot + .headshot {
     margin-left: -40px;
     z-index: 1;
@@ -121,3 +98,33 @@ main {
 #buttons, #filter-2 {
     margin-top: 20px;
 }
+
+#num-games, #line{
+    margin: 20px;
+}
+
+.filters button, .neu-button{
+    width: 9em;
+    padding: 1em;
+    border: none;
+    background-color: rgb(255, 255, 255);
+    color: gray;
+}
+
+.neu-button{
+    color: black;
+    border: 2px solid black;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: #46474c;
+    color: white;
+}
+
+.neu-button:hover{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+.filters button:hover{
+    color: black;
+}
+
