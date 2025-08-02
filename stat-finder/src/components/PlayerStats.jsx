@@ -18,6 +18,8 @@ export default function PlayerStats() {
     let playerData = state.playerData;
     let newPlayerData = playerData.filter(data => data.Gcar !== null);
     const [pageNum, setPageNum] = useState(1);
+    const [numOfGames, setNumOfGames] = useState(5);
+    const [statType, setStatType] = useState('PTS');
 
     function handlePrev() {
         setPageNum(prev => {
@@ -33,7 +35,7 @@ export default function PlayerStats() {
 
     function handleNext() {
         setPageNum(prev => {
-            if (prev < (newPlayerData.length / 10)) {
+            if (prev <= (newPlayerData.length / numOfGames)) {
                 console.log('Succesfully incremented pageNum.');
                 return (prev + 1);
             } else {
@@ -59,13 +61,13 @@ export default function PlayerStats() {
                     <div className='stats'>
                         <Bar 
                             data={{
-                                labels: newPlayerData.slice((newPlayerData.length) - (10 * pageNum), (newPlayerData.length) - (10 * (pageNum - 1)))
+                                labels: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1)))
                                 .map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
                                 datasets : [
                                     {
                                         label: "PTS",
-                                        data: newPlayerData.slice((newPlayerData.length) - (10 * pageNum), (newPlayerData.length) - (10 * (pageNum - 1))).map(data => data.PTS),
-                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (10 * pageNum), (newPlayerData.length) - (10 * (pageNum - 1))).map(data => data.PTS > 19 ? "green" 
+                                        data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data.PTS),
+                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data.PTS > 19 ? "green" 
                                            : data.PTS == 19 ? "gray" 
                                            : "red"),
                                     }
@@ -102,13 +104,33 @@ export default function PlayerStats() {
                     </div>
                 </div>
 
+
                 <div className='stats-controls'>
                     <div className='stats-container' id='buttons'>
+                        <div className='filters'>
+                            <button value="pts">PTS</button>
+                            <button value="reb">REB</button>
+                            <button value="ast">AST</button>
+                            <button value="3pm">3PM</button>
+                            <button value="stl">STL</button>
+                            <button value="blk">BLK</button>
+                            <button value="pts-ast">PTS + AST</button>
+                            <button value="pts-reb">PTS + REB</button>
+                            <button value="reb-ast">REB + AST</button>
+                            <button value="pts-reb-ast">PTS + REB + AST</button>
+                            <button value="stl-blk">STL + BLK</button>
+                            <select name='num-games' id='num-games' onChange={event => setNumOfGames(event.target.value)}>
+                                <option value="5">L5</option>
+                                <option value="10">L10</option>
+                                <option value="20">L20</option>
+                            </select>
+                        </div>
                         <div className='pagination'>
-                            <button className='neu-button' onClick={handleNext}>Prev 10</button>
-                            <button className='neu-button' onClick={handlePrev}>Next 10</button>
+                            <button className='neu-button' onClick={handleNext}>Prev {numOfGames}</button>
+                            <button className='neu-button' onClick={handlePrev}>Next {numOfGames}</button>
                         </div>
                     </div>
+
                 </div>
 
             </div>
