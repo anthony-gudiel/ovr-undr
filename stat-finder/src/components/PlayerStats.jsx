@@ -20,6 +20,7 @@ export default function PlayerStats() {
     const [pageNum, setPageNum] = useState(1);
     const [numOfGames, setNumOfGames] = useState(5);
     const [statType, setStatType] = useState('PTS');
+    const [line, setLine] = useState(19.5);
 
     function handlePrev() {
         setPageNum(prev => {
@@ -65,10 +66,10 @@ export default function PlayerStats() {
                                 .map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
                                 datasets : [
                                     {
-                                        label: "PTS",
-                                        data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data.PTS),
-                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data.PTS > 19 ? "green" 
-                                           : data.PTS == 19 ? "gray" 
+                                        label: statType,
+                                        data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType]),
+                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType] > 19.5 ? "green" 
+                                           : data[statType] == 19.5 ? "gray" 
                                            : "red"),
                                     }
                                 ]
@@ -78,9 +79,9 @@ export default function PlayerStats() {
                                     legend: {
                                         labels: {
                                             generateLabels: () => [
-                                            { text: 'PTS > 19', fillStyle: 'green' },
-                                            { text: 'PTS = 19', fillStyle: 'gray' },
-                                            { text: 'PTS < 19', fillStyle: 'red' }
+                                            { text: 'PTS > 19.5', fillStyle: 'green' },
+                                            { text: 'PTS = 19.5', fillStyle: 'gray' },
+                                            { text: 'PTS < 19.5', fillStyle: 'red' }
                                             ]
                                         }
                                     },
@@ -88,8 +89,8 @@ export default function PlayerStats() {
                                         annotations: {
                                             line1: {
                                                 type: 'line',
-                                                yMin: 19,
-                                                yMax: 19,
+                                                yMin: 19.5,
+                                                yMax: 19.5,
                                                 borderColor: 'white',
                                                 borderWidth: 2,
                                                 borderDash: [6, 6],
@@ -108,22 +109,32 @@ export default function PlayerStats() {
                 <div className='stats-controls'>
                     <div className='stats-container' id='buttons'>
                         <div className='filters'>
-                            <button value="pts">PTS</button>
-                            <button value="reb">REB</button>
-                            <button value="ast">AST</button>
-                            <button value="3pm">3PM</button>
-                            <button value="stl">STL</button>
-                            <button value="blk">BLK</button>
-                            <button value="pts-ast">PTS + AST</button>
-                            <button value="pts-reb">PTS + REB</button>
-                            <button value="reb-ast">REB + AST</button>
-                            <button value="pts-reb-ast">PTS + REB + AST</button>
-                            <button value="stl-blk">STL + BLK</button>
+                            <div className='stat-type'>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS">PTS</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="TRB">REB</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="AST">AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="3P">3PM</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="STL">STL</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="BLK">BLK</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_AST">PTS + AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB">PTS + REB</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="REB_AST">REB + AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB_AST">P + R + A</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="STL_BLK">STL + BLK</button>
+                            </div>
                             <select name='num-games' id='num-games' onChange={event => setNumOfGames(event.target.value)}>
                                 <option value="5">L5</option>
                                 <option value="10">L10</option>
                                 <option value="20">L20</option>
                             </select>
+                            <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
+                                {[...Array(60)].map((_, i) => {
+                                    const val = (i + 0.5);
+                                    return (
+                                        <option key={val} value={val}>{val}</option>
+                                    );
+                                })}
+                            </select> 
                         </div>
                         <div className='pagination'>
                             <button className='neu-button' onClick={handleNext}>Prev {numOfGames}</button>
