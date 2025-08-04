@@ -103,7 +103,17 @@ main {
     margin: 20px;
 }
 
-.filters button, .neu-button{
+.stat-button-active {
+    border: none;
+    color: black;
+    border-bottom: 3px solid black;
+    font-weight: bold;
+    background-color: white;
+    width: 9em;
+    padding: 1em;
+}
+
+.stat-button, .neu-button{
     width: 9em;
     padding: 1em;
     border: none;
