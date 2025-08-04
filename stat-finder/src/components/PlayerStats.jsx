@@ -68,8 +68,8 @@ export default function PlayerStats() {
                                     {
                                         label: statType,
                                         data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType]),
-                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType] > 19.5 ? "green" 
-                                           : data[statType] == 19.5 ? "gray" 
+                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType] > line ? "green" 
+                                           : data[statType] == line ? "gray" 
                                            : "red"),
                                     }
                                 ]
@@ -79,9 +79,9 @@ export default function PlayerStats() {
                                     legend: {
                                         labels: {
                                             generateLabels: () => [
-                                            { text: 'PTS > 19.5', fillStyle: 'green' },
-                                            { text: 'PTS = 19.5', fillStyle: 'gray' },
-                                            { text: 'PTS < 19.5', fillStyle: 'red' }
+                                            { text: `PTS > ${line}`, fillStyle: 'green' },
+                                            { text: `PTS = ${line}`, fillStyle: 'gray' },
+                                            { text: `PTS < ${line}`, fillStyle: 'red' }
                                             ]
                                         }
                                     },
@@ -89,8 +89,8 @@ export default function PlayerStats() {
                                         annotations: {
                                             line1: {
                                                 type: 'line',
-                                                yMin: 19.5,
-                                                yMax: 19.5,
+                                                yMin: line,
+                                                yMax: line,
                                                 borderColor: 'white',
                                                 borderWidth: 2,
                                                 borderDash: [6, 6],
