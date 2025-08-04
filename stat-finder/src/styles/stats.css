@@ -48,6 +48,20 @@ footer{
     margin-left: 10px;
     padding: 10px;
     color: white;
+    flex: 1 1 0%;
+    min-width: 0;
+    min-height: 0;
+}
+
+.stats-container#chart {
+    flex: 1 1 0%;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+     height: 70vh;
+
 }
 
 .stats-container {
@@ -59,6 +73,9 @@ footer{
     transform: translateY(-5px);
     margin-left: 20px;
     background-color: #46474c;
+    flex: 1 1 0%;
+    min-width: 0;
+    min-height: 0;
 }
 
 .stats-header {
@@ -95,11 +112,11 @@ footer{
 }
 
 #chart {
-    height: 500px;
+    width: 100%;
     max-width: 100%;
     max-height: 100%;
     border: 10px solid black;
-
+    box-sizing: border-box;
 }
 
 #buttons {
