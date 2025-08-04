@@ -66,15 +66,32 @@ export default function PlayerStats() {
                     <div className='stats'>
                         <Bar 
                             data={{
-                                labels: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1)))
+                                labels: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
+                                 (newPlayerData.length) - (numOfGames * (pageNum - 1)))
                                 .map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
                                 datasets : [
                                     {
                                         label: statType,
-                                        data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType]),
-                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum), (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => data[statType] > line ? "green" 
-                                           : data[statType] == line ? "gray" 
-                                           : "red"),
+                                        data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
+                                         (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => 
+                                            statType.length <= 3 ? data[statType] 
+                                            : statType.length == 11 ? data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)] 
+                                            : data[statType.slice(0, 3)] + data[statType.slice(4, 7)]
+                                         ),
+                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
+                                         (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => {
+                                                if (statType.length <= 3) {
+                                                    return data[statType] > line ? "green" : data[statType] < line ? "red" : "gray"
+                                                } else if (statType.length == 11){
+                                                    return (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) > line ? "green"
+                                                    : (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) < line ? "red"
+                                                    : "gray"
+                                                } else {
+                                                    return data[statType.slice(0, 3)] + data[statType.slice(4, 7)] > line ? "green"
+                                                    : data[statType.slice(0, 3)] + data[statType.slice(4, 7)] < line ? "red"
+                                                    : "gray"
+                                                }
+                                         })
                                     }
                                 ]
                             }}
@@ -121,24 +138,38 @@ export default function PlayerStats() {
                     <div className='stats-container' id='buttons'>
                         <div className='filters'>
                             <div className='stat-type'>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS" className={`stat-button${statType == "PTS" ? '-active' : ""}`} id='PTS'>PTS</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="TRB" className={`stat-button${statType == "TRB" ? '-active' : ""}`} id='REB'>REB</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="AST" className={`stat-button${statType ==  "AST" ? '-active' : ""}`} id='AST'>AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="3P" className={`stat-button${statType == "3P" ? '-active' : ""}`} id='3PM'>3PM</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="STL" className={`stat-button${statType ==  "STL" ? '-active' : ""}`} id='STL'>STL</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="BLK" className={`stat-button${statType == "BLK" ? '-active' : ""}`} id='BLK'>BLK</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_AST" className={`stat-button${statType == "PTS_AST" ? '-active' : ""}`} id='PTS_REB'>PTS + AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB" className={`stat-button${statType == "PTS_REB" ? '-active' : ""}`} id='REB_AST'>PTS + REB</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="REB_AST" className={`stat-button${statType == "REB_AST" ? '-active' : ""}`} id='PTS_AST'>REB + AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB_AST" className={`stat-button${statType == "PTS_REB_AST" ? '-active' : ""}`} id='PTS_REB_AST'>P + R + A</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="STL_BLK" className={`stat-button${statType == "STL_BLK" ? '-active' : ""}`} id='STL_BLK'>STL + BLK</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="PTS" className={`stat-button${statType == "PTS" ? '-active' : ""}`} id='PTS'>PTS</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="TRB" className={`stat-button${statType == "TRB" ? '-active' : ""}`} id='REB'>REB</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="AST" className={`stat-button${statType ==  "AST" ? '-active' : ""}`} id='AST'>AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="3P" className={`stat-button${statType == "3P" ? '-active' : ""}`} id='3PM'>3PM</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="STL" className={`stat-button${statType ==  "STL" ? '-active' : ""}`} id='STL'>STL</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="BLK" className={`stat-button${statType == "BLK" ? '-active' : ""}`} id='BLK'>BLK</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="PTS+AST" className={`stat-button${statType == "PTS+AST" ? '-active' : ""}`} id='PTS_AST'>PTS + AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="PTS+TRB" className={`stat-button${statType == "PTS+TRB" ? '-active' : ""}`} id='PTS_REB'>PTS + REB</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="TRB+AST" className={`stat-button${statType == "TRB+AST" ? '-active' : ""}`} id='REB_AST'>REB + AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="PTS+TRB+AST" className={`stat-button${statType == "PTS+TRB+AST" ? '-active' : ""}`} id='PTS_REB_AST'>P + R + A</button>
+                                <button onClick={(button) => setStatType(button.target.value) }
+                                value="STL+BLK" className={`stat-button${statType == "STL+BLK" ? '-active' : ""}`} id='STL_BLK'>STL + BLK</button>
                             </div>
                             <div className='stat-type' id='last-games'>
-                                <button onClick={event => setNumOfGames(event.target.value)} value="5" className={`stat-button${numOfGames == "5" ? '-active-games' : ""}`}>L5</button>
-                                <button onClick={event => setNumOfGames(event.target.value)} value="10" className={`stat-button${numOfGames == "10" ? '-active-games' : ""}`}>L10</button>
-                                <button onClick={event => setNumOfGames(event.target.value)} value="20" className={`stat-button${numOfGames == "20" ? '-active-games' : ""}`}>L20</button>
+                                <button onClick={event => setNumOfGames(event.target.value)} value="5"
+                                 className={`stat-button${numOfGames == "5" ? '-active-games' : ""}`}>L5</button>
+                                <button onClick={event => setNumOfGames(event.target.value)} value="10"
+                                 className={`stat-button${numOfGames == "10" ? '-active-games' : ""}`}>L10</button>
+                                <button onClick={event => setNumOfGames(event.target.value)} value="20"
+                                 className={`stat-button${numOfGames == "20" ? '-active-games' : ""}`}>L20</button>
                             </div>
-                            <label for="line">Set Line: </label>
+                            <label htmlFor="line">Set Line: </label>
                             <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
                                 {[...Array(60)].map((_, i) => {
                                     const val = (i + 0.5);
