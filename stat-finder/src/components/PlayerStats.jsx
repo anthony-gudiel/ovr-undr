@@ -10,13 +10,14 @@ Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, a
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
-defaults.color = '#FFFFFF'
+defaults.color = '#FFFFFF';
 
 export default function PlayerStats() {
     
     const { state } = useLocation();
     let playerData = state.playerData;
     let newPlayerData = playerData.filter(data => data.Gcar !== null);
+
     const [pageNum, setPageNum] = useState(1);
     const [numOfGames, setNumOfGames] = useState(5);
     const [statType, setStatType] = useState('PTS');
@@ -78,9 +79,11 @@ export default function PlayerStats() {
                                 plugins: {
                                     legend: {
                                         labels: {
+                                            color: 'white',
+                                            boxWidth: 15,
                                             generateLabels: () => [
-                                            { text: `PTS > ${line}`, fillStyle: 'green' },
-                                            { text: `PTS = ${line}`, fillStyle: 'gray' },
+                                            { text: `PTS > ${line}`, fillStyle: 'green'},
+                                            { text: `PTS = ${line}`, fillStyle: 'gray'},
                                             { text: `PTS < ${line}`, fillStyle: 'red' }
                                             ]
                                         }
@@ -93,7 +96,7 @@ export default function PlayerStats() {
                                                 yMax: line,
                                                 borderColor: 'white',
                                                 borderWidth: 2,
-                                                borderDash: [6, 6],
+                                                borderDash: [6, 6]
                                             }
                                         }
                                     }
@@ -110,17 +113,17 @@ export default function PlayerStats() {
                     <div className='stats-container' id='buttons'>
                         <div className='filters'>
                             <div className='stat-type'>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS">PTS</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="TRB">REB</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="AST">AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="3P">3PM</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="STL">STL</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="BLK">BLK</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_AST">PTS + AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB">PTS + REB</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="REB_AST">REB + AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB_AST">P + R + A</button>
-                                <button onClick={(button) => setStatType(button.target.value) }value="STL_BLK">STL + BLK</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS" className={`stat-button${statType == "PTS" ? '-active' : ""}`} id='PTS'>PTS</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="TRB" className={`stat-button${statType == "TRB" ? '-active' : ""}`} id='REB'>REB</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="AST" className={`stat-button${statType ==  "AST" ? '-active' : ""}`} id='AST'>AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="3P" className={`stat-button${statType == "3P" ? '-active' : ""}`} id='3PM'>3PM</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="STL" className={`stat-button${statType ==  "STL" ? '-active' : ""}`} id='STL'>STL</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="BLK" className={`stat-button${statType == "BLK" ? '-active' : ""}`} id='BLK'>BLK</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_AST" className={`stat-button${statType == "PTS_AST" ? '-active' : ""}`} id='PTS_REB'>PTS + AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB" className={`stat-button${statType == "PTS_REB" ? '-active' : ""}`} id='REB_AST'>PTS + REB</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="REB_AST" className={`stat-button${statType == "REB_AST" ? '-active' : ""}`} id='PTS_AST'>REB + AST</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB_AST" className={`stat-button${statType == "PTS_REB_AST" ? '-active' : ""}`} id='PTS_REB_AST'>P + R + A</button>
+                                <button onClick={(button) => setStatType(button.target.value) }value="STL_BLK" className={`stat-button${statType == "STL_BLK" ? '-active' : ""}`} id='STL_BLK'>STL + BLK</button>
                             </div>
                             <select name='num-games' id='num-games' onChange={event => setNumOfGames(event.target.value)}>
                                 <option value="5">L5</option>
