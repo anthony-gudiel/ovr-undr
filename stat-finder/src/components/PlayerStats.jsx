@@ -11,6 +11,7 @@ Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, a
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 defaults.color = '#FFFFFF';
+defaults.font.family = "'Roboto', 'sans-serif'";
 
 export default function PlayerStats() {
     
@@ -54,10 +55,12 @@ export default function PlayerStats() {
         <main>
             <h2 className='stats-header'>{newPlayerData[0].Name.replace('_', ' ')} Performance History</h2>
             <div className='player-card'>
-                <img src={`https://www.basketball-reference.com/req/202106291/images/headshots/${newPlayerData[0].pID}.jpg`}
-                alt="Player headshot" className='headshot'/>
-                <img src={`https://cdn.ssref.net/req/202507211/tlogo/bbr/${newPlayerData[0].Team}.png`}
-                alt="Player headshot" className='headshot'/>
+                <div className='images'>
+                    <img src={`https://www.basketball-reference.com/req/202106291/images/headshots/${newPlayerData[0].pID}.jpg`}
+                    alt="Player headshot" className='headshot'/>
+                    <img src={`https://cdn.ssref.net/req/202507211/tlogo/bbr/${newPlayerData[0].Team}.png`}
+                    alt="Player headshot" className='headshot'/>
+                </div>
                 
                 <div className='stats-container' id='chart'>
                     <div className='stats'>
@@ -79,12 +82,11 @@ export default function PlayerStats() {
                                 plugins: {
                                     legend: {
                                         labels: {
-                                            color: 'white',
                                             boxWidth: 15,
                                             generateLabels: () => [
-                                            { text: `PTS > ${line}`, fillStyle: 'green'},
-                                            { text: `PTS = ${line}`, fillStyle: 'gray'},
-                                            { text: `PTS < ${line}`, fillStyle: 'red' }
+                                            { text: `${statType} > ${line}`, fillStyle: 'green'},
+                                            { text: `${statType} = ${line}`, fillStyle: 'gray'},
+                                            { text: `${statType} < ${line}`, fillStyle: 'red' }
                                             ]
                                         }
                                     },
@@ -99,11 +101,17 @@ export default function PlayerStats() {
                                                 borderDash: [6, 6]
                                             }
                                         }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: `${newPlayerData[0].Name.replace('_', ' ')} - ${statType}`,
+                                        font: {
+                                            size: 30
+                                        }
                                     }
                                 }
                             }}
-                            height={600}
-                            width={1160}
+                            width={1200}
                         />
                     </div>
                 </div>
@@ -125,11 +133,12 @@ export default function PlayerStats() {
                                 <button onClick={(button) => setStatType(button.target.value) }value="PTS_REB_AST" className={`stat-button${statType == "PTS_REB_AST" ? '-active' : ""}`} id='PTS_REB_AST'>P + R + A</button>
                                 <button onClick={(button) => setStatType(button.target.value) }value="STL_BLK" className={`stat-button${statType == "STL_BLK" ? '-active' : ""}`} id='STL_BLK'>STL + BLK</button>
                             </div>
-                            <select name='num-games' id='num-games' onChange={event => setNumOfGames(event.target.value)}>
-                                <option value="5">L5</option>
-                                <option value="10">L10</option>
-                                <option value="20">L20</option>
-                            </select>
+                            <div className='stat-type' id='last-games'>
+                                <button onClick={event => setNumOfGames(event.target.value)} value="5" className={`stat-button${numOfGames == "5" ? '-active-games' : ""}`}>L5</button>
+                                <button onClick={event => setNumOfGames(event.target.value)} value="10" className={`stat-button${numOfGames == "10" ? '-active-games' : ""}`}>L10</button>
+                                <button onClick={event => setNumOfGames(event.target.value)} value="20" className={`stat-button${numOfGames == "20" ? '-active-games' : ""}`}>L20</button>
+                            </div>
+                            <label for="line">Set Line: </label>
                             <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
                                 {[...Array(60)].map((_, i) => {
                                     const val = (i + 0.5);
@@ -148,7 +157,7 @@ export default function PlayerStats() {
                 </div>
 
             </div>
-
+            
             <Footer />
 
         </main>
