@@ -23,6 +23,7 @@ export default function PlayerStats() {
     const [numOfGames, setNumOfGames] = useState(5);
     const [statType, setStatType] = useState('PTS');
     const [line, setLine] = useState(19.5);
+    const [overOrUnder, setOverOrUnder] = useState('>');
 
     function handlePrev() {
         setPageNum(prev => {
@@ -81,14 +82,14 @@ export default function PlayerStats() {
                                         backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
                                          (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => {
                                                 if (statType.length <= 3) {
-                                                    return data[statType] > line ? "green" : data[statType] < line ? "red" : "gray"
+                                                    return data[statType] > line ? (overOrUnder == '>' ? 'green' : 'red') : data[statType] < line ? (overOrUnder == '>' ? 'red' : 'green') : "gray"
                                                 } else if (statType.length == 11){
-                                                    return (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) > line ? "green"
-                                                    : (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) < line ? "red"
+                                                    return (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) > line ? (overOrUnder == '>' ? 'green' : 'red')
+                                                    : (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) < line ? (overOrUnder == '>' ? 'red' : 'green')
                                                     : "gray"
                                                 } else {
-                                                    return data[statType.slice(0, 3)] + data[statType.slice(4, 7)] > line ? "green"
-                                                    : data[statType.slice(0, 3)] + data[statType.slice(4, 7)] < line ? "red"
+                                                    return data[statType.slice(0, 3)] + data[statType.slice(4, 7)] > line ? (overOrUnder == '>' ? 'green' : 'red')
+                                                    : data[statType.slice(0, 3)] + data[statType.slice(4, 7)] < line ? (overOrUnder == '>' ? 'red' : 'green')
                                                     : "gray"
                                                 }
                                          })
@@ -101,9 +102,9 @@ export default function PlayerStats() {
                                         labels: {
                                             boxWidth: 15,
                                             generateLabels: () => [
-                                            { text: `${statType} > ${line}`, fillStyle: 'green'},
+                                            { text: `${statType} ${overOrUnder} ${line}`, fillStyle: 'green'},
                                             { text: `${statType} = ${line}`, fillStyle: 'gray'},
-                                            { text: `${statType} < ${line}`, fillStyle: 'red' }
+                                            { text: `${statType} ${overOrUnder == '>' ? '<' : '>'} ${line}`, fillStyle: 'red' }
                                             ]
                                         }
                                     },
@@ -169,15 +170,18 @@ export default function PlayerStats() {
                                 <button onClick={event => setNumOfGames(event.target.value)} value="20"
                                  className={`stat-button${numOfGames == "20" ? '-active-games' : ""}`}>L20</button>
                             </div>
-                            <label htmlFor="line">Set Line: </label>
-                            <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
-                                {[...Array(60)].map((_, i) => {
-                                    const val = (i + 0.5);
-                                    return (
-                                        <option key={val} value={val}>{val}</option>
-                                    );
-                                })}
-                            </select> 
+                            <div className='line-container'>
+                                <button id='over' onClick={() => setOverOrUnder('>')} className={`${overOrUnder == '>' ? 'active-ou' : 'inactive-ou'}`}>O</button>
+                                <button id='under' onClick={() => setOverOrUnder('<')} className={`${overOrUnder == '<' ? 'active-ou' : 'inactive-ou'}`}>U</button>
+                                <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
+                                    {[...Array(60)].map((_, i) => {
+                                        const val = (i + 0.5);
+                                        return (
+                                            <option key={val} value={val}>{val}</option>
+                                        );
+                                    })}
+                                </select> 
+                            </div>
                         </div>
                         <div className='pagination'>
                             <button className='neu-button' onClick={handleNext}>Prev {numOfGames}</button>
