@@ -99,6 +99,29 @@ footer{
     margin-bottom: 10px;
 }
 
+.line-container{
+    width: 100%;
+}
+
+.line-container button{
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    max-height: 100px;
+    border: none;
+}
+
+.active-ou{
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+}
+
+.inactive-ou{
+    color: gray;
+    background-color: white;
+}
+
 .stats-controls{
     display: flex;
     flex-direction: column;
@@ -187,12 +210,16 @@ footer{
     border-bottom: 2px solid black;
 }
 
-.neu-button:active{
+.neu-button:active, .active-ou:active, .inactive-ou:active{
     transform: scale(0.97); 
 }
 
-.filters button:hover{
+.filters button:hover, .inactive-ou:hover{
     color: black;
+}
+
+.active-ou:hover{
+    color: white !important;
 }
 
 .images{
