@@ -28,6 +28,23 @@ export default function PlayerStats() {
     const [minutes, setMinutes] = useState(null);
     const [opponent, setOpponent] = useState(null);
     const [filteredData, setFilteredData] = useState(null);
+    const [showOppButton, setShowOppButton] = useState(false);
+    const [showMinButton, setShowMinButton] = useState(false);
+    const [minutesInput, setMinutesInput] = useState(null);
+    const [opponentInput, setOpponentInput] = useState(null);
+
+    useEffect(() => {
+        if ((opponent != null) || (minutes != null)){
+            handleFilterSubmit();
+        } else {
+            setFilteredData(null);
+        }
+    }, [opponent, minutes])
+
+    useEffect(() => {
+        console.log("showOppButton: " + showOppButton );
+        console.log("showMinButton: " + showMinButton);
+    }, [showOppButton, showMinButton])
 
     function getSlicedData()
     {
@@ -42,19 +59,31 @@ export default function PlayerStats() {
 
     function handleFilterSubmit(event){
 
-        event.preventDefault();
-        event.currentTarget.reset();
+        if (event) {
+            event.preventDefault();
+            event.currentTarget.reset();
+        }
 
         setFilteredData(newPlayerData.filter(game => {
-            if (!opponent){
+            if (!opponentInput){
+                setMinutes(minutesInput);
+                setShowMinButton(true);
                 return game.MP >= minutes;
-            } else if (!minutes){
+            } else if (!minutesInput){
+                setOpponent(opponentInput);
+                setShowOppButton(true);
                 return game.Opp == opponent;
-            } else if (minutes && opponent){
+            } else if (minutesInput && opponentInput){
+                setOpponent(opponentInput);
+                setMinutes(minutesInput);
+                setShowMinButton(true);
+                setShowOppButton(true);
                 return (game.Opp == opponent) && (game.MP >= minutes);
-            }
+            } 
         }));
+
         setPageNum(1);
+        setShowFilters(null);
     }
 
     function handlePrev() {
@@ -227,13 +256,25 @@ export default function PlayerStats() {
                                     })}
                                 </select> 
                                 <div className='dropdown'>
-                                    <img src={filterIcon} onClick={() => setShowFilters(showFilters ? false : true)} alt='filter icon'></img>
+                                    <img src={filterIcon} className={filteredData ? "active-button" : null} onClick={() => setShowFilters(showFilters ? false : true)} alt='filter icon'></img>
+                                    <button className={`filter${showMinButton ? "-show-exit" : ""}`} onClick={() => {
+                                        setShowFilters(null);
+                                        setMinutes(null);
+                                        setMinutesInput(null);
+                                        setShowMinButton(false);
+                                    }}> <small>x</small> Minutes</button>
+                                    <button className={`filter${showOppButton ? "-show-exit" : ""}`} onClick={() => {
+                                        setShowFilters(null);
+                                        setOpponent(null);
+                                        setOpponentInput(null);
+                                        setShowOppButton(false);
+                                    }}><small>x</small> Opponent</button>
                                     <form onSubmit={handleFilterSubmit}>
                                         <label htmlFor='opponent' className={`filter${showFilters ? "-show" : ""}`}>Opponent:</label>
-                                        <input type='text' placeholder='e.g. TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponent(event.target.value)}></input>
+                                        <input type='text' placeholder='e.g. TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponentInput(event.target.value)}></input>
                                         <label htmlFor='minutes' className={`filter${showFilters ? "-show" : ""}`}>Minutes Played:</label>
-                                        <input type='number' placeholder='30' id='minutes' name='minutes' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setMinutes(event.target.value)}></input>
-                                        <button type="submit" className={`filter${showFilters ? "-show" : ""}`}>Apply Filters</button>
+                                        <input type='number' placeholder='30' id='minutes' name='minutes' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setMinutesInput(event.target.value)}></input>
+                                        <button type="submit" className='filter'></button>
                                     </form>
                                 </div>
                             </div>

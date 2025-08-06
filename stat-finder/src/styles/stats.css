@@ -18,8 +18,26 @@ footer{
     margin-bottom: 0px;
 }
 
-form .filter{
+form .filter, .dropdown .filter{
     display: none;
+}
+small {
+    vertical-align: middle;
+}
+
+.dropdown .filter-show-exit {
+    vertical-align: middle;
+    margin-left: 10px;
+    width: fit-content;
+    padding: 10px;
+    background-color: #46474c;
+    color: rgb(209, 203, 203);
+    border-radius: 10px;
+}
+
+.dropdown .filter-show-exit:hover{
+    color: white;
+
 }
 
 .headshot {
@@ -31,6 +49,10 @@ form .filter{
     box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     margin-top: -50px;
     margin-bottom: 100px;
+}
+
+.active-button{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .player-card {
