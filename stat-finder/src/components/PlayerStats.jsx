@@ -1,6 +1,6 @@
 import '../styles/stats.css'
 import Footer from './Footer'
-import Search from './Search'
+import filterIcon from '../assets/filter.png'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, defaults} from 'chart.js';
@@ -24,6 +24,38 @@ export default function PlayerStats() {
     const [statType, setStatType] = useState('PTS');
     const [line, setLine] = useState(19.5);
     const [overOrUnder, setOverOrUnder] = useState('>');
+    const [showFilters, setShowFilters] = useState(false);
+    const [minutes, setMinutes] = useState(null);
+    const [opponent, setOpponent] = useState(null);
+    const [filteredData, setFilteredData] = useState(null);
+
+    function getSlicedData()
+    {
+        const dataSource = filteredData ? filteredData : newPlayerData;
+        const totalGames = dataSource.length;
+        const gamesToShow = Math.min(numOfGames, totalGames);
+        const startIndex = Math.max(0, totalGames - (gamesToShow * pageNum));
+        const endIndex = totalGames - (gamesToShow * (pageNum - 1));
+        
+        return dataSource.slice(startIndex, endIndex);
+    };
+
+    function handleFilterSubmit(event){
+
+        event.preventDefault();
+        event.currentTarget.reset();
+
+        setFilteredData(newPlayerData.filter(game => {
+            if (!opponent){
+                return game.MP >= minutes;
+            } else if (!minutes){
+                return game.Opp == opponent;
+            } else if (minutes && opponent){
+                return (game.Opp == opponent) && (game.MP >= minutes);
+            }
+        }));
+        setPageNum(1);
+    }
 
     function handlePrev() {
         setPageNum(prev => {
@@ -39,7 +71,7 @@ export default function PlayerStats() {
 
     function handleNext() {
         setPageNum(prev => {
-            if (prev <= (newPlayerData.length / numOfGames)) {
+            if (prev <= ((filteredData ? filteredData : newPlayerData).length / numOfGames)) {
                 console.log('Succesfully incremented pageNum.');
                 return (prev + 1);
             } else {
@@ -67,30 +99,43 @@ export default function PlayerStats() {
                     <div className='stats'>
                         <Bar 
                             data={{
-                                labels: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
-                                 (newPlayerData.length) - (numOfGames * (pageNum - 1)))
-                                .map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
+                                labels: getSlicedData().map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
                                 datasets : [
                                     {
                                         label: statType,
-                                        data: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
-                                         (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => 
-                                            statType.length <= 3 ? data[statType] 
-                                            : statType.length == 11 ? data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)] 
-                                            : data[statType.slice(0, 3)] + data[statType.slice(4, 7)]
-                                         ),
-                                        backgroundColor: newPlayerData.slice((newPlayerData.length) - (numOfGames * pageNum),
-                                         (newPlayerData.length) - (numOfGames * (pageNum - 1))).map(data => {
+                                        data: getSlicedData().map(data => {
+                                            if (statType.length <= 3) return data[statType] ;
+                                            else if (statType.length == 11) return data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)];
+                                            else return data[statType.slice(0, 3)] + data[statType.slice(4, 7)];
+                                        }),
+                                        backgroundColor: getSlicedData().map(data => {
                                                 if (statType.length <= 3) {
-                                                    return data[statType] > line ? (overOrUnder == '>' ? 'green' : 'red') : data[statType] < line ? (overOrUnder == '>' ? 'red' : 'green') : "gray"
-                                                } else if (statType.length == 11){
-                                                    return (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) > line ? (overOrUnder == '>' ? 'green' : 'red')
-                                                    : (data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) < line ? (overOrUnder == '>' ? 'red' : 'green')
-                                                    : "gray"
+                                                    if (data[statType] > line){
+                                                        if (overOrUnder == '>') return 'green';
+                                                        else return 'red';
+                                                    }
+                                                    else if (data[statType] < line){
+                                                        if (overOrUnder == '>') return 'red';
+                                                        else return 'green';
+                                                    } else return 'gray';
+                                                    } else if (statType.length == 11){
+                                                        if ((data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) > line){
+                                                            if (overOrUnder == '>') return 'green';
+                                                            else return 'red';
+                                                        } 
+                                                        else if ((data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) < line){
+                                                            if (overOrUnder == '>') return 'red';
+                                                            else return 'green';
+                                                        }
+                                                        else return "gray"
                                                 } else {
-                                                    return data[statType.slice(0, 3)] + data[statType.slice(4, 7)] > line ? (overOrUnder == '>' ? 'green' : 'red')
-                                                    : data[statType.slice(0, 3)] + data[statType.slice(4, 7)] < line ? (overOrUnder == '>' ? 'red' : 'green')
-                                                    : "gray"
+                                                    if (data[statType.slice(0, 3)] + data[statType.slice(4, 7)] > line){
+                                                        if (overOrUnder == '>') return 'green';
+                                                        else return 'red';
+                                                    } else if (data[statType.slice(0, 3)] + data[statType.slice(4, 7)] < line ){
+                                                        if (overOrUnder == '>') return 'red';
+                                                        else return 'green';
+                                                    } else return 'gray'
                                                 }
                                          })
                                     }
@@ -181,6 +226,16 @@ export default function PlayerStats() {
                                         );
                                     })}
                                 </select> 
+                                <div className='dropdown'>
+                                    <img src={filterIcon} onClick={() => setShowFilters(showFilters ? false : true)} alt='filter icon'></img>
+                                    <form onSubmit={handleFilterSubmit}>
+                                        <label htmlFor='opponent' className={`filter${showFilters ? "-show" : ""}`}>Opponent:</label>
+                                        <input type='text' placeholder='e.g. TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponent(event.target.value)}></input>
+                                        <label htmlFor='minutes' className={`filter${showFilters ? "-show" : ""}`}>Minutes Played:</label>
+                                        <input type='number' placeholder='30' id='minutes' name='minutes' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setMinutes(event.target.value)}></input>
+                                        <button type="submit" className={`filter${showFilters ? "-show" : ""}`}>Apply Filters</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <div className='pagination'>
