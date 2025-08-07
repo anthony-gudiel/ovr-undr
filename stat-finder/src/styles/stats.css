@@ -21,8 +21,13 @@ footer{
 form .filter, .dropdown .filter{
     display: none;
 }
+
 small {
     vertical-align: middle;
+}
+
+.dropdown-submit{
+    margin-top: 20px;
 }
 
 .dropdown .filter-show-exit {
@@ -40,6 +45,49 @@ small {
 
 }
 
+.dropdown input, .dropdown label{
+    margin-top: 20px;
+}
+
+/* Did not write this animation */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown .show-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: fit-content;
+    padding: 0px 10px 30px 10px;
+    border-radius: 30px;
+    border: 1px solid black;
+    margin-left: 35px;
+    animation: slideDown 0.3s ease-out forwards;
+
+}
+
+.dropdown .hide-form {
+    display: none;
+    opacity: 0;
+}
+
+.dropdown label {
+    width: auto;
+}
+
+.dropdown input{
+    width: 125px;
+    height: 5px;
+}
+
 .headshot {
     width: 150px;       
     height: 150px;
@@ -51,8 +99,8 @@ small {
     margin-bottom: 100px;
 }
 
-.active-button{
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.active-button, .dropdown .filter-show-exit{
+    box-shadow: 2px 1px 2px black;
 }
 
 .player-card {

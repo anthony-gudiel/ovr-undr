@@ -4,6 +4,7 @@ import filterIcon from '../assets/filter.png'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, defaults} from 'chart.js';
+import { toast } from 'sonner'
 import { Bar } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin);
@@ -15,6 +16,7 @@ defaults.font.family = "'Roboto', 'sans-serif'";
 
 export default function PlayerStats() {
     
+    let isFromUseEffect = false;
     const { state } = useLocation();
     let playerData = state.playerData;
     let newPlayerData = playerData.filter(data => data.Gcar !== null);
@@ -35,16 +37,12 @@ export default function PlayerStats() {
 
     useEffect(() => {
         if ((opponent != null) || (minutes != null)){
+            isFromUseEffect = true;
             handleFilterSubmit();
         } else {
             setFilteredData(null);
         }
     }, [opponent, minutes])
-
-    useEffect(() => {
-        console.log("showOppButton: " + showOppButton );
-        console.log("showMinButton: " + showMinButton);
-    }, [showOppButton, showMinButton])
 
     function getSlicedData()
     {
@@ -62,14 +60,24 @@ export default function PlayerStats() {
         if (event) {
             event.preventDefault();
             event.currentTarget.reset();
+
+            if (!minutesInput && !opponentInput) {
+                toast.error('Please fill in at least 1 field before submission.');
+                return;
+            }
+            if (opponentInput.length != 3){
+                toast.error('Please enter a valid team abbreviation (e.g. TOR)');
+                return;
+            }
+            
         }
 
-        setFilteredData(newPlayerData.filter(game => {
-            if (!opponentInput){
+        let filtered = newPlayerData.filter(game => {
+            if (!opponentInput && minutesInput){
                 setMinutes(minutesInput);
                 setShowMinButton(true);
                 return game.MP >= minutes;
-            } else if (!minutesInput){
+            } else if (!minutesInput && opponentInput){
                 setOpponent(opponentInput);
                 setShowOppButton(true);
                 return game.Opp == opponent;
@@ -79,9 +87,18 @@ export default function PlayerStats() {
                 setShowMinButton(true);
                 setShowOppButton(true);
                 return (game.Opp == opponent) && (game.MP >= minutes);
-            } 
-        }));
+            }
+            return false;
+        });
 
+        console.log(filtered.length);
+
+        if (filtered.length == 0 && isFromUseEffect){
+            toast.error('No games were found matching the provided criteria.');
+            isFromUseEffect = false;
+        }
+
+        setFilteredData(filtered);
         setPageNum(1);
         setShowFilters(null);
     }
@@ -269,7 +286,7 @@ export default function PlayerStats() {
                                         setOpponentInput(null);
                                         setShowOppButton(false);
                                     }}><small>x</small> Opponent</button>
-                                    <form onSubmit={handleFilterSubmit}>
+                                    <form className={showFilters ? 'show-form' : 'hide-form'} onSubmit={handleFilterSubmit}>
                                         <label htmlFor='opponent' className={`filter${showFilters ? "-show" : ""}`}>Opponent:</label>
                                         <input type='text' placeholder='e.g. TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponentInput(event.target.value)}></input>
                                         <label htmlFor='minutes' className={`filter${showFilters ? "-show" : ""}`}>Minutes Played:</label>
