@@ -181,7 +181,8 @@ export default function PlayerStats() {
                                         text: `Supporting Stats - ${supportingStatType == 'MP' ? 'Minutes Played' : supportingStatType}`,
                                         font: {
                                             size: 30
-                                        }
+                                        },
+                                        padding: 30
                                     },
                                     datalabels: {
                                         anchor: 'end',
@@ -267,7 +268,8 @@ export default function PlayerStats() {
                                         text: `${newPlayerData[0].Name.replace('_', ' ')} - ${statType}`,
                                         font: {
                                             size: 30
-                                        }
+                                        },
+                                        padding: 30
                                     },
                                     datalabels: {
                                         anchor: 'end',
