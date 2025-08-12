@@ -105,7 +105,7 @@ small {
 
 .player-card {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 100px;
@@ -127,15 +127,16 @@ small {
     min-height: 0;
 }
 
-.stats-container#chart {
-    flex: 1 1 0%;
-    min-width: 0;
-    min-height: 0;
+.stats-container#chart, .stats-container#chart2 {
     width: 100%;
-    height: 100%;
     box-sizing: border-box;
-     height: 70vh;
+    height: 70vh;
+}
 
+.stats-container#chart{
+    margin-top: 20px;
+    height: 60vh;
+    margin-bottom: 20px;
 }
 
 .stats-container {
@@ -147,9 +148,6 @@ small {
     transform: translateY(-5px);
     margin-left: 20px;
     background-color: #46474c;
-    flex: 1 1 0%;
-    min-width: 0;
-    min-height: 0;
 }
 
 .stats-header {
@@ -177,14 +175,6 @@ small {
     justify-content: space-between;
 }
 
-.line-container button{
-    width: 60px;
-    height: 30px;
-    text-align: center;
-    max-height: 100px;
-    border: none;
-}
-
 .line-container img{
     margin-top: 10px;
     height: 40px;
@@ -200,11 +190,21 @@ small {
     color: white;
     background-color: black;
     border-radius: 5px;
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    max-height: 100px;
+    border: none;
 }
 
 .inactive-ou{
     color: gray;
     background-color: white;
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    max-height: 100px;
+    border: none;
 }
 
 .stats-controls{
@@ -219,10 +219,7 @@ small {
     z-index: 1;
 }
 
-#chart {
-    width: 100%;
-    max-width: 100%;
-    max-height: 100%;
+#chart, #chart2 {
     border: 10px solid black;
     box-sizing: border-box;
 }
@@ -238,7 +235,7 @@ small {
     width: 100%;
 }
 
-#last-games button {
+#last-games .stat-button, #last-games .stat-button-active-games {
     background-color: #46474c;
     border-radius: 10px;
     margin: 20px;
@@ -261,9 +258,7 @@ small {
     color: black;
     border-bottom: 3px solid black;
     font-weight: bold;
-    background-color: white;
-    width: 9em;
-    padding: 1em;
+
 }
 
 .stat-button-active-games{
@@ -271,7 +266,6 @@ small {
     border: none;
     border-bottom: 3px solid black;
     font-weight: bold;
-    background-color: white;
     width: 9em;
     padding: 1em;
     border-radius: 10px;
@@ -283,6 +277,15 @@ small {
     border: none;
     background-color: rgb(255, 255, 255);
     color: gray;
+}
+
+#bar .stat-button, #bar .stat-button-active{
+    background-color: white;
+    width: 7em;
+    padding: 0.8em;
+    font-size: 0.9em;
+    white-space: nowrap;
+;
 }
 
 .neu-button{
@@ -309,5 +312,24 @@ small {
 
 .images{
     width: 100%;
+}
+
+.supporting-stats{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.supporting-stats button{
+    margin: 0;
+    background-color:#46474c;
+    padding: 5px;
+    border: none;
+    color: gray;
+    width: 9em;
+
+}
+
+.supporting-stats .stat-button-active{
+    color: white;
 }
 

@@ -7,7 +7,8 @@ import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, 
 import { toast } from 'sonner'
 import { Bar } from 'react-chartjs-2';
 import annotationPlugin from 'chartjs-plugin-annotation';
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin);
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin, ChartDataLabels);
 
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
@@ -24,6 +25,7 @@ export default function PlayerStats() {
     const [pageNum, setPageNum] = useState(1);
     const [numOfGames, setNumOfGames] = useState(5);
     const [statType, setStatType] = useState('PTS');
+    const [supportingStatType, setSupportingStatType] = useState('FGA');
     const [line, setLine] = useState(19.5);
     const [overOrUnder, setOverOrUnder] = useState('>');
     const [showFilters, setShowFilters] = useState(false);
@@ -44,14 +46,14 @@ export default function PlayerStats() {
         }
     }, [opponent, minutes])
 
-    function getSlicedData()
-    {
+    function getSlicedData(){
+
         const dataSource = filteredData ? filteredData : newPlayerData;
         const totalGames = dataSource.length;
         const gamesToShow = Math.min(numOfGames, totalGames);
         const startIndex = Math.max(0, totalGames - (gamesToShow * pageNum));
         const endIndex = totalGames - (gamesToShow * (pageNum - 1));
-        
+                
         return dataSource.slice(startIndex, endIndex);
     };
 
@@ -143,6 +145,62 @@ export default function PlayerStats() {
                 
                 <div className='stats-container' id='chart'>
                     <div className='stats'>
+                        <div className='supporting-stats'>
+                            <button onClick={(button) => setSupportingStatType(button.target.value) }
+                            value="MP" className={`stat-button${supportingStatType == "MP" ? '-active' : ""}`} id='MP'>Minutes</button>
+                            <button onClick={(button) => setSupportingStatType(button.target.value) }
+                            value="PF" className={`stat-button${supportingStatType == "PF" ? '-active' : ""}`} id='PF'>Fouls</button>
+                            <button onClick={(button) => setSupportingStatType(button.target.value) }
+                            value="FGA" className={`stat-button${supportingStatType ==  "FGA" ? '-active' : ""}`} id='FGA'>FGA</button>
+                            <button onClick={(button) => setSupportingStatType(button.target.value) }
+                            value="3PA" className={`stat-button${supportingStatType == "3PA" ? '-active' : ""}`} id='3PA'>3PA</button>
+                            <button onClick={(button) => setSupportingStatType(button.target.value) }
+                            value="FTA" className={`stat-button${supportingStatType ==  "FTA" ? '-active' : ""}`} id='FTA'>FTA</button>
+                        </div>
+                        <Bar 
+                            data={{
+                                labels: getSlicedData().map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
+                                datasets : [
+                                    {
+                                        label: supportingStatType,
+                                        data: getSlicedData().map(data => {
+                                            if (supportingStatType == 'MP') return Number(data[supportingStatType].slice(0,2));
+                                            else return data[supportingStatType];
+                                        }),
+                                        backgroundColor: 'rgb(174, 177, 183)'
+                                    }
+                                ]
+                            }}
+                            options={{
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: `Supporting Stats - ${supportingStatType == 'MP' ? 'Minutes Played' : supportingStatType}`,
+                                        font: {
+                                            size: 30
+                                        }
+                                    },
+                                    datalabels: {
+                                        anchor: 'end',
+                                        align: 'top',
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold'
+                                        },
+                                        formatter: (value) => value
+                                    }
+                                }
+                            }}
+                            width={1200}
+                        />
+                    </div>
+                </div>
+
+                <div className='stats-container' id='chart2'>
+                    <div className='stats'>
                         <Bar 
                             data={{
                                 labels: getSlicedData().map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
@@ -190,14 +248,7 @@ export default function PlayerStats() {
                             options={{
                                 plugins: {
                                     legend: {
-                                        labels: {
-                                            boxWidth: 15,
-                                            generateLabels: () => [
-                                            { text: `${statType} ${overOrUnder} ${line}`, fillStyle: 'green'},
-                                            { text: `${statType} = ${line}`, fillStyle: 'gray'},
-                                            { text: `${statType} ${overOrUnder == '>' ? '<' : '>'} ${line}`, fillStyle: 'red' }
-                                            ]
-                                        }
+                                        display: false
                                     },
                                     annotation: {
                                         annotations: {
@@ -217,6 +268,15 @@ export default function PlayerStats() {
                                         font: {
                                             size: 30
                                         }
+                                    },
+                                    datalabels: {
+                                        anchor: 'end',
+                                        align: 'top',
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold'
+                                        },
+                                        formatter: (value) => value
                                     }
                                 }
                             }}
@@ -229,7 +289,7 @@ export default function PlayerStats() {
                 <div className='stats-controls'>
                     <div className='stats-container' id='buttons'>
                         <div className='filters'>
-                            <div className='stat-type'>
+                            <div className='stat-type' id='bar'>
                                 <button onClick={(button) => setStatType(button.target.value) }
                                 value="PTS" className={`stat-button${statType == "PTS" ? '-active' : ""}`} id='PTS'>PTS</button>
                                 <button onClick={(button) => setStatType(button.target.value) }
@@ -260,18 +320,20 @@ export default function PlayerStats() {
                                  className={`stat-button${numOfGames == "10" ? '-active-games' : ""}`}>L10</button>
                                 <button onClick={event => setNumOfGames(event.target.value)} value="20"
                                  className={`stat-button${numOfGames == "20" ? '-active-games' : ""}`}>L20</button>
+                                 <div>
+                                    <button id='over' onClick={() => setOverOrUnder('>')} className={`${overOrUnder == '>' ? 'active-ou' : 'inactive-ou'}`}>O</button>
+                                    <button id='under' onClick={() => setOverOrUnder('<')} className={`${overOrUnder == '<' ? 'active-ou' : 'inactive-ou'}`}>U</button>
+                                    <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
+                                        {[...Array(60)].map((_, i) => {
+                                            const val = (i + 0.5);
+                                            return (
+                                                <option key={val} value={val}>{val}</option>
+                                            );
+                                        })}
+                                    </select> 
+                                </div>
                             </div>
                             <div className='line-container'>
-                                <button id='over' onClick={() => setOverOrUnder('>')} className={`${overOrUnder == '>' ? 'active-ou' : 'inactive-ou'}`}>O</button>
-                                <button id='under' onClick={() => setOverOrUnder('<')} className={`${overOrUnder == '<' ? 'active-ou' : 'inactive-ou'}`}>U</button>
-                                <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
-                                    {[...Array(60)].map((_, i) => {
-                                        const val = (i + 0.5);
-                                        return (
-                                            <option key={val} value={val}>{val}</option>
-                                        );
-                                    })}
-                                </select> 
                                 <div className='dropdown'>
                                     <img src={filterIcon} className={filteredData ? "active-button" : null} onClick={() => setShowFilters(showFilters ? false : true)} alt='filter icon'></img>
                                     <button className={`filter${showMinButton ? "-show-exit" : ""}`} onClick={() => {
@@ -303,7 +365,6 @@ export default function PlayerStats() {
                     </div>
 
                 </div>
-
             </div>
             
             <Footer />
