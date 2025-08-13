@@ -84,19 +84,105 @@ src/
    ```
 
 3. **Environment Setup**
-   Create a `.env` file in the root directory with your database credentials:
+   Create a `.env` file in the `src` directory with your database credentials:
    ```env
-   DB_HOST=your_database_host (e.g. localhost)
-   DB_USER=your_database_user (e.g. postgres)
-   DB_PORT=your_database_port (e.g. 1234)
-   DB_PASSWORD=your_database_password
-   DB_NAME=your_database_name (e.g. nba_data)
+   DB_HOST=localhost
+   DB_USER=postgres
+   DB_PASSWORD=your_password
+   DB_NAME=nba_data
+   DB_PORT=5432
+   VITE_API_URL=http://localhost:5000
    ```
 
 4. **Database Setup**
    - Ensure PostgreSQL is installed and running
    - Import the provided CSV 'all_players_gamelog_2025.csv' into a `players` table within the database listed in your .env
-   - Players must contain the following columns (case sensitive): Rk (type: integer), Gcar (type: integer), Gtm (type: integer), Date (type: text), Team (type: text), Home (type: text), Opp (type: text), Result (type: text), GS (type: text), MP (type: text), FG (type: integer), FGA (type: integer), FG% (type: real), 3P (type: integer), 3PA (type: integer), 3P% (type: real), 2P (type: integer), 2PA (type: integer), 2P% (type: real), eFG% (type: real), FT (type: integer), FTA (type: integer), FT% (type: real), ORB (type: integer), DRB (type: integer), TRB (type: integer), AST (type: integer), STL (type: integer), BLK (type: integer), TOV (type: integer), PF (type: integer), GmSc (type: real), PlusMin (type: integer), pID (type: text), Name (type: text)
+   - 
+## Database Schema
+
+The application expects a PostgreSQL table named `players` with the following columns:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Rk` | integer | Rank/Game number |
+| `Gcar` | integer | Games in career |
+| `Gtm` | integer | Games this season |
+| `Date` | text | Game date |
+| `Team` | text | Player's team |
+| `Home` | text | Home team indicator |
+| `Opp` | text | Opponent team |
+| `Result` | text | Game result (W/L) |
+| `GS` | text | Game started indicator |
+| `MP` | text | Minutes played |
+| `FG` | integer | Field goals made |
+| `FGA` | integer | Field goal attempts |
+| `FG%` | real | Field goal percentage |
+| `3P` | integer | 3-pointers made |
+| `3PA` | integer | 3-point attempts |
+| `3P%` | real | 3-point percentage |
+| `2P` | integer | 2-pointers made |
+| `2PA` | integer | 2-point attempts |
+| `2P%` | real | 2-point percentage |
+| `eFG%` | real | Effective field goal percentage |
+| `FT` | integer | Free throws made |
+| `FTA` | integer | Free throw attempts |
+| `FT%` | real | Free throw percentage |
+| `ORB` | integer | Offensive rebounds |
+| `DRB` | integer | Defensive rebounds |
+| `TRB` | integer | Total rebounds |
+| `AST` | integer | Assists |
+| `STL` | integer | Steals |
+| `BLK` | integer | Blocks |
+| `TOV` | integer | Turnovers |
+| `PF` | integer | Personal fouls |
+| `GmSc` | real | Game score |
+| `PlusMin` | integer | Plus/minus |
+| `pID` | text | Player ID |
+| `Name` | text | Player name |
+
+### Table Creation SQL
+
+```sql
+CREATE TABLE players (
+    "Rk" INTEGER,
+    "Gcar" INTEGER,
+    "Gtm" INTEGER,
+    "Date" TEXT,
+    "Team" TEXT,
+    "Home" TEXT,
+    "Opp" TEXT,
+    "Result" TEXT,
+    "GS" TEXT,
+    "MP" TEXT,
+    "FG" INTEGER,
+    "FGA" INTEGER,
+    "FG%" REAL,
+    "3P" INTEGER,
+    "3PA" INTEGER,
+    "3P%" REAL,
+    "2P" INTEGER,
+    "2PA" INTEGER,
+    "2P%" REAL,
+    "eFG%" REAL,
+    "FT" INTEGER,
+    "FTA" INTEGER,
+    "FT%" REAL,
+    "ORB" INTEGER,
+    "DRB" INTEGER,
+    "TRB" INTEGER,
+    "AST" INTEGER,
+    "STL" INTEGER,
+    "BLK" INTEGER,
+    "TOV" INTEGER,
+    "PF" INTEGER,
+    "GmSc" REAL,
+    "PlusMin" INTEGER,
+    "pID" TEXT,
+    "Name" TEXT
+);
+```
+
+**Note:** Column names are case-sensitive and must match exactly as shown above.
 
 ## Usage
 
