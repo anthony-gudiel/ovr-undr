@@ -302,12 +302,12 @@ small {
     transform: scale(0.97); 
 }
 
-.filters button:hover, .inactive-ou:hover{
-    color: black;
+#bar button:hover, .inactive-ou:hover{
+    color: black !important;
 }
 
 .active-ou:hover{
-    color: white !important;
+    color: white;
 }
 
 .images{

@@ -352,7 +352,7 @@ export default function PlayerStats() {
                                     }}><small>x</small> Opponent</button>
                                     <form className={showFilters ? 'show-form' : 'hide-form'} onSubmit={handleFilterSubmit}>
                                         <label htmlFor='opponent' className={`filter${showFilters ? "-show" : ""}`}>Opponent:</label>
-                                        <input type='text' placeholder='e.g. TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponentInput(event.target.value)}></input>
+                                        <input type='text' placeholder='TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponentInput(event.target.value)}></input>
                                         <label htmlFor='minutes' className={`filter${showFilters ? "-show" : ""}`}>Minutes Played:</label>
                                         <input type='number' placeholder='30' id='minutes' name='minutes' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setMinutesInput(event.target.value)}></input>
                                         <button type="submit" className='filter'></button>
