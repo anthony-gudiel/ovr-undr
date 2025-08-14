@@ -1,0 +1,12 @@
+[data-sonner-toaster] {
+  --width: 400px;
+  --toast-width: 400px;
+}
+
+[data-sonner-toast] {
+  max-width: 400px !important;
+  width: auto !important;
+  min-width: 300px;
+  padding: 16px !important;
+  border-radius: 8px;
+}
