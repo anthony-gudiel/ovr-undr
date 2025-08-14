@@ -31,20 +31,24 @@ export default function PlayerStats() {
     const [showFilters, setShowFilters] = useState(false);
     const [minutes, setMinutes] = useState(null);
     const [opponent, setOpponent] = useState(null);
+    const [homeAway, setHomeAway] = useState(null);
     const [filteredData, setFilteredData] = useState(null);
     const [showOppButton, setShowOppButton] = useState(false);
     const [showMinButton, setShowMinButton] = useState(false);
+    const [showHomeButton, setShowHomeButton] = useState(false);
     const [minutesInput, setMinutesInput] = useState(null);
     const [opponentInput, setOpponentInput] = useState(null);
+    const [homeAwayInput, setHomeAwayInput] = useState(null);
+
 
     useEffect(() => {
-        if ((opponent != null) || (minutes != null)){
+        if ((opponent != null) || (minutes != null) || (homeAway != null)){
             isFromUseEffect = true;
             handleFilterSubmit();
         } else {
             setFilteredData(null);
         }
-    }, [opponent, minutes])
+    }, [opponent, minutes, homeAway])
 
     function getSlicedData(){
 
@@ -63,32 +67,64 @@ export default function PlayerStats() {
             event.preventDefault();
             event.currentTarget.reset();
 
-            if (!minutesInput && !opponentInput) {
+            if (!minutesInput && !opponentInput && !homeAwayInput) {
                 toast.error('Please fill in at least 1 field before submission.');
                 return;
             }
             if (opponentInput && opponentInput.length != 3){
-                toast.error('Please enter a valid team abbreviation (e.g. TOR)');
+                toast.error('Please enter a valid team abbreviation (e.g. TOR).');
+                return;
+            }
+            if (minutesInput && (minutesInput > 48 || minutesInput < 0)){
+                toast.error('Please enter a minutes value from 0-48.');
+                return;
+            }
+            if (homeAwayInput && homeAwayInput.length != 4){
+                toast.error('Please specify "Home" or "Away"');
                 return;
             }
             
         }
 
         let filtered = newPlayerData.filter(game => {
-            if (!opponentInput && minutesInput){
+            if (!opponentInput && minutesInput && homeAwayInput){
+                setHomeAway(homeAwayInput);
+                setShowHomeButton(true);
                 setMinutes(minutesInput);
                 setShowMinButton(true);
-                return game.MP >= minutes;
-            } else if (!minutesInput && opponentInput){
+                return game.MP >= minutes && (homeAwayInput == 'Home' ? game.Home == null : game.Home != null);
+            } else if (!minutesInput && opponentInput && homeAwayInput){
+                setHomeAway(homeAwayInput);
+                setShowHomeButton(true);
                 setOpponent(opponentInput);
                 setShowOppButton(true);
-                return game.Opp == opponent;
-            } else if (minutesInput && opponentInput){
+                return game.Opp == opponent && (homeAwayInput == 'Home' ? game.Home == null : game.Home != null);
+            } else if (minutesInput && opponentInput && !homeAwayInput){
                 setOpponent(opponentInput);
                 setMinutes(minutesInput);
                 setShowMinButton(true);
                 setShowOppButton(true);
                 return (game.Opp == opponent) && (game.MP >= minutes);
+            } else if (minutesInput && !opponentInput && !homeAwayInput) {
+                setMinutes(minutesInput);
+                setShowMinButton(true);
+                return (game.MP >= minutes);
+            } else if (opponentInput && !minutesInput && !homeAwayInput){
+                setOpponent(opponentInput);
+                setShowOppButton(true);
+                return game.Opp == opponent;
+            } else if (homeAwayInput && !minutesInput && !opponentInput){
+                setHomeAway(homeAwayInput);
+                setShowHomeButton(true);
+                return (homeAwayInput == 'Home' ? game.Home == null : game.Home != null);
+            } else if (homeAwayInput && minutesInput && opponentInput){
+                setMinutes(minutesInput);
+                setShowMinButton(true);
+                setHomeAway(homeAwayInput);
+                setShowHomeButton(true);
+                setOpponent(opponentInput);
+                setShowOppButton(true);
+                return (game.Opp == opponent) && (homeAwayInput == 'Home' ? game.Home == null : game.Home != null) && (game.MP >= minutes);
             }
             return false;
         });
@@ -337,22 +373,27 @@ export default function PlayerStats() {
                                 <div className='dropdown'>
                                     <img src={filterIcon} className={filteredData ? "active-button" : null} onClick={() => setShowFilters(showFilters ? false : true)} alt='filter icon'></img>
                                     <button className={`filter${showMinButton ? "-show-exit" : ""}`} onClick={() => {
-                                        setShowFilters(null);
                                         setMinutes(null);
                                         setMinutesInput(null);
                                         setShowMinButton(false);
                                     }}> <small>x</small> Minutes</button>
                                     <button className={`filter${showOppButton ? "-show-exit" : ""}`} onClick={() => {
-                                        setShowFilters(null);
                                         setOpponent(null);
                                         setOpponentInput(null);
                                         setShowOppButton(false);
                                     }}><small>x</small> Opponent</button>
+                                    <button className={`filter${showHomeButton ? "-show-exit" : ""}`} onClick={() => {
+                                        setHomeAway(null);
+                                        setHomeAwayInput(null);
+                                        setShowHomeButton(false);
+                                    }}><small>x</small> Home/Away</button>
                                     <form className={showFilters ? 'show-form' : 'hide-form'} onSubmit={handleFilterSubmit}>
                                         <label htmlFor='opponent' className={`filter${showFilters ? "-show" : ""}`}>Opponent:</label>
                                         <input type='text' placeholder='TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponentInput(event.target.value)}></input>
                                         <label htmlFor='minutes' className={`filter${showFilters ? "-show" : ""}`}>Minutes Played:</label>
                                         <input type='number' placeholder='30' id='minutes' name='minutes' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setMinutesInput(event.target.value)}></input>
+                                        <label htmlFor='homeAway' className={`filter${showFilters ? "-show" : ""}`}>Home or Away:</label>
+                                        <input type='text' placeholder='Home' id='homeAway' name='homeAway' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setHomeAwayInput(event.target.value)}></input>
                                         <button type="submit" className='filter'></button>
                                     </form>
                                 </div>
