@@ -19,7 +19,7 @@ A React-based web application that helps users make more informed betting decisi
 - **Opponent Filter**: See performance against specific teams
 - **Minutes Filter**: Filter games by minimum minutes played
 - **Game Range**: View Last 5 (L5) or Last 10 (L10) games
-- **Home/Away**: Filter by game location (Coming soon)
+- **Home/Away**: Filter by game location
 
 ### 📈 Interactive Charts
 - Main performance chart with betting line overlay
@@ -254,7 +254,7 @@ The application shows how players perform relative to betting lines:
 ### Smart Filtering
 - Filter by opponent to see matchup-specific performance
 - Minutes filter to focus on games with significant playing time
-- Home/away splits for location-based analysis (coming soon)
+- Home/away splits for location-based analysis
 
 ## Data Sources
 - Player statistics sourced from Basketball-Reference.com
