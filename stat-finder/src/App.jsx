@@ -6,6 +6,7 @@ import Contact from "./components/Contact"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Toaster, toast } from 'sonner'
 import { useNavigate } from "react-router-dom"
+import './styles/toast.css'
 
 function App() {
 

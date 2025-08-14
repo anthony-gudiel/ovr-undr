@@ -1,0 +1,30 @@
+.contact-page h1, .contact-page h2, .about-page h1, .about-page h2{
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+.contact-page p{
+    font-size: medium;
+}
+
+.feedback li, .about-features li{
+    float: none;
+    padding-right: 0;
+}
+
+.about-page {
+    text-align: center;
+}
+
+.mission, .how-it-works, .about-features, .data-source, .disclaimer, .developer, .contact-info, .feedback, .data-info {
+    display: flex;
+    flex-direction: column;
+    background: #f8f9fa;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 20px;
+}
+
+.about-page p{
+    font-size: medium;
+}

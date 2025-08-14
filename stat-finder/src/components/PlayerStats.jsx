@@ -67,7 +67,7 @@ export default function PlayerStats() {
                 toast.error('Please fill in at least 1 field before submission.');
                 return;
             }
-            if (opponentInput.length != 3){
+            if (opponentInput && opponentInput.length != 3){
                 toast.error('Please enter a valid team abbreviation (e.g. TOR)');
                 return;
             }
@@ -92,8 +92,6 @@ export default function PlayerStats() {
             }
             return false;
         });
-
-        console.log(filtered.length);
 
         if (filtered.length == 0 && isFromUseEffect){
             toast.error('No games were found matching the provided criteria.');
