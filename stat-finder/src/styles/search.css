@@ -1,0 +1,7 @@
+.inactive-logo {
+    filter: grayscale(100%);
+}
+
+.active-logo, .inactive-logo {
+    background-color: white;
+}

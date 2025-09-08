@@ -1,16 +1,26 @@
 import Header from "./components/Header"
 import Landing from "./components/LandingMain"
 import PlayerStats from './components/PlayerStats'
+import NflPlayerStats from './components/NflPlayerStats'
 import About from "./components/About"
 import Contact from "./components/Contact"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Routes, Route, useNavigate} from "react-router-dom"
 import { Toaster, toast } from 'sonner'
-import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 import './styles/toast.css'
 
 function App() {
 
     const navigate = useNavigate();
+    const [league, setLeague] = useState('NBA');
+
+    function changeToNba() {
+        setLeague('NBA');
+    }
+
+    function changeToNfl(){
+        setLeague('NFL');
+    }
 
     function isEmpty(obj) {
         return Object.keys(obj).length === 0;
@@ -35,20 +45,32 @@ function App() {
             return;
         }
 
-        userPlayerSearch = userPlayerSearch[0].toUpperCase() 
-            + userPlayerSearch.substring(1, spaceIndex + 1)
-            + userPlayerSearch[spaceIndex + 1].toUpperCase() 
-            + userPlayerSearch.substring(spaceIndex + 2, userPlayerSearch.length);
-       
-        userPlayerSearch = userPlayerSearch.substring(0, spaceIndex) + '_' 
-        + userPlayerSearch.substring(spaceIndex + 1, userPlayerSearch.length);        
 
-        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;        
+        if (league === 'NBA') {
+            userPlayerSearch = userPlayerSearch[0].toUpperCase() 
+                + userPlayerSearch.substring(1, spaceIndex + 1)
+                + userPlayerSearch[spaceIndex + 1].toUpperCase() 
+                + userPlayerSearch.substring(spaceIndex + 2, userPlayerSearch.length);
+        
+            userPlayerSearch = userPlayerSearch.substring(0, spaceIndex) + '_' 
+            + userPlayerSearch.substring(spaceIndex + 1, userPlayerSearch.length);   
+        }
+
+        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;  
+        const url2 = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/nfl-player?name=${encodeURIComponent(userPlayerSearch)}`;  
+
 
         formElement.reset();
         
         try {
-            const response = await fetch(url);
+            let response;
+            if (league === 'NBA'){
+                response = await fetch(url);
+            } else if (league === 'NFL'){
+                response = await fetch(url2);
+            } else {
+                throw new Error('Unknown league selection');
+            }
             if (!response.ok) {
                 throw new Error (`Response Status: ${response.status}`);
             }
@@ -59,7 +81,11 @@ function App() {
             if (isEmpty(json)) {
                 toast.error("No players matching that name were found. Please check your spelling or try a different name.");
             } else {
-                navigate('/player-stats', {state: {playerData: json}});
+                if (league === 'NBA') {
+                    navigate('/player-stats', {state: {playerData: json}});
+                } else if (league === 'NFL') {
+                    navigate('/nfl-player-stats', {state: {playerData: json}});
+                }
             }
 
         } catch (error) {
@@ -72,13 +98,25 @@ function App() {
     <>
 
       <Toaster richColors position="top-center"/>
-      <Header handleSearch={handleSearch} />
+      <Header 
+        handleSearch={handleSearch} 
+        changeToNba={changeToNba} 
+        changeToNfl={changeToNfl}
+        league={league}
+      />
         <Routes>
-          <Route index element={<Landing handleSearch={handleSearch} />} />
-          <Route path="/player-stats" element={<PlayerStats />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />    
-          <Route path="*" element={<Error />} />  
+            <Route index element={<Landing  
+                handleSearch={handleSearch} 
+                changeToNba={changeToNba} 
+                changeToNfl={changeToNfl}
+                league={league}
+            />} 
+            />
+            <Route path="/player-stats" element={<PlayerStats />} />
+            <Route path="/nfl-player-stats" element={<NflPlayerStats />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />    
+            <Route path="*" element={<Error />} />  
         </Routes>
     </>
   )

@@ -10,22 +10,25 @@ export default function Header(props) {
             <nav aria-label="Main navigation">
                 <ul>
                     <li>
+                        <Link to='/'>Home</Link>
+                    </li>
+                    <li>
+                        <Link to='/'>Features</Link>
+                    </li>
+                    <li>
                         <Link to='/about'>About</Link>
                     </li>
                     <li>
                         <Link to='/contact'>Contact</Link>
                     </li>
-                    <li>
-                        <Link to='/'>Start Research</Link>
-                    </li>
-                    <li>
-                        <Link to='/'>Features</Link>
-                    </li>
                 </ul>
             </nav>
             <Outlet />
                 <div className='small-search'>
-                    <Search onClick={props.handleSearch}/>
+                    <Search onClick={props.handleSearch} 
+                    league={props.league} 
+                    changeToNba={props.changeToNba} 
+                    changeToNfl={props.changeToNfl}/>
                 </div>
         </header>
     )
