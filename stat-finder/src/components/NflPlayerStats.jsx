@@ -15,18 +15,19 @@ defaults.responsive = true;
 defaults.color = '#FFFFFF';
 defaults.font.family = "'Roboto', 'sans-serif'";
 
-export default function PlayerStats() {
+export default function NflPlayerStats() {
     
     let isFromUseEffect = false;
     const { state } = useLocation();
     let playerData = state.playerData;
-    let newPlayerData = playerData.filter(data => data.Gcar !== null);
+    let newPlayerData = playerData.filter(data => data.Gcar !== null || data.Gcar2 !== null || data.Gcar3 !== null );
+    let position = (newPlayerData[0].Position).slice(0,2);
 
     const [pageNum, setPageNum] = useState(1);
     const [numOfGames, setNumOfGames] = useState(5);
-    const [statType, setStatType] = useState('PTS');
-    const [supportingStatType, setSupportingStatType] = useState('FGA');
-    const [line, setLine] = useState(19.5);
+    const [statType, setStatType] = useState('MainYds');
+    const [positionSlider, setPositionSlider] = useState(null);
+    const [line, setLine] = useState(80);
     const [overOrUnder, setOverOrUnder] = useState('>');
     const [showFilters, setShowFilters] = useState(false);
     const [minutes, setMinutes] = useState(null);
@@ -39,7 +40,28 @@ export default function PlayerStats() {
     const [minutesInput, setMinutesInput] = useState(null);
     const [opponentInput, setOpponentInput] = useState(null);
     const [homeAwayInput, setHomeAwayInput] = useState(null);
+    const [headshotYear, setHeadshotYear] = useState(2024);
 
+    useEffect(() => {
+        if (position == 'WR') {
+            setPositionSlider('Receiving');
+            setStatType('MainYds');
+            setLine(60.5);
+        }
+        else if (position == 'RB') {
+            setPositionSlider('Rushing');
+            setStatType('MainYds');
+            setLine(60.5);
+        } 
+        else if (position == 'QB') {
+            setPositionSlider('Passing');
+            setStatType('MainYds');
+            setLine(220.5);
+        };
+        
+        // Reset headshot year to 2024 when player changes
+        setHeadshotYear(2024);
+    }, [playerData])
 
     useEffect(() => {
         if ((opponent != null) || (minutes != null) || (homeAway != null)){
@@ -92,13 +114,13 @@ export default function PlayerStats() {
                 setShowHomeButton(true);
                 setMinutes(minutesInput);
                 setShowMinButton(true);
-                return game.MP >= minutes && (homeAwayInput == 'Home' ? game.Home == null : game.Home != null);
+                return game.MP >= minutes && (homeAwayInput == 'Home' ? game.Location == null : game.Location != null);
             } else if (!minutesInput && opponentInput && homeAwayInput){
                 setHomeAway(homeAwayInput);
                 setShowHomeButton(true);
                 setOpponent(opponentInput);
                 setShowOppButton(true);
-                return game.Opp == opponent && (homeAwayInput == 'Home' ? game.Home == null : game.Home != null);
+                return game.Opp == opponent && (homeAwayInput == 'Home' ? game.Location == null : game.Location != null);
             } else if (minutesInput && opponentInput && !homeAwayInput){
                 setOpponent(opponentInput);
                 setMinutes(minutesInput);
@@ -116,7 +138,7 @@ export default function PlayerStats() {
             } else if (homeAwayInput && !minutesInput && !opponentInput){
                 setHomeAway(homeAwayInput);
                 setShowHomeButton(true);
-                return (homeAwayInput == 'Home' ? game.Home == null : game.Home != null);
+                return (homeAwayInput == 'Home' ? game.Location == null : game.Location != null);
             } else if (homeAwayInput && minutesInput && opponentInput){
                 setMinutes(minutesInput);
                 setShowMinButton(true);
@@ -124,7 +146,7 @@ export default function PlayerStats() {
                 setShowHomeButton(true);
                 setOpponent(opponentInput);
                 setShowOppButton(true);
-                return (game.Opp == opponent) && (homeAwayInput == 'Home' ? game.Home == null : game.Home != null) && (game.MP >= minutes);
+                return (game.Opp == opponent) && (homeAwayInput == 'Home' ? game.Location == null : game.Location != null) && (game.MP >= minutes);
             }
             return false;
         });
@@ -163,119 +185,48 @@ export default function PlayerStats() {
         })
     }
 
+    function handleImageError() {
+        setHeadshotYear(prevYear => {
+            const newYear = prevYear - 1;
+            if (newYear >= 2010) {
+                return newYear;
+            } else {
+                console.log('No headshot found for any available year');
+                return prevYear;
+            }
+        });
+    }
 
-    // console.log(playerData);
+
 
     return (
         <main>
             <h2 className='stats-header'>{newPlayerData[0].Name.replace('_', ' ')} Performance History</h2>
             <div className='player-card'>
                 <div className='images'>
-                    <img src={`https://www.basketball-reference.com/req/202106291/images/headshots/${newPlayerData[0].pID}.jpg`}
-                    alt="Player headshot" className='headshot'/>
-                    <img src={`https://cdn.ssref.net/req/202507211/tlogo/bbr/${newPlayerData[(newPlayerData.length) - 1].Team}.png`}
-                    alt="Player headshot" className='headshot'/>
+                    <img src={`https://www.pro-football-reference.com/req/20230307/images/headshots/${newPlayerData[0].pID}_${headshotYear}.jpg`}
+                    alt="Player headshot" className='headshot' onError={handleImageError}/>
                 </div>
-                
-                <div className='stats-container' id='chart'>
-                    <div className='stats'>
-                        <div className='supporting-stats'>
-                            <button onClick={(button) => setSupportingStatType(button.target.value) }
-                            value="MP" className={`stat-button${supportingStatType == "MP" ? '-active' : ""}`} id='MP'>Minutes</button>
-                            <button onClick={(button) => setSupportingStatType(button.target.value) }
-                            value="PF" className={`stat-button${supportingStatType == "PF" ? '-active' : ""}`} id='PF'>Fouls</button>
-                            <button onClick={(button) => setSupportingStatType(button.target.value) }
-                            value="FGA" className={`stat-button${supportingStatType ==  "FGA" ? '-active' : ""}`} id='FGA'>FGA</button>
-                            <button onClick={(button) => setSupportingStatType(button.target.value) }
-                            value="3PA" className={`stat-button${supportingStatType == "3PA" ? '-active' : ""}`} id='3PA'>3PA</button>
-                            <button onClick={(button) => setSupportingStatType(button.target.value) }
-                            value="FTA" className={`stat-button${supportingStatType ==  "FTA" ? '-active' : ""}`} id='FTA'>FTA</button>
-                        </div>
-                        <Bar 
-                            data={{
-                                labels: getSlicedData().map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
-                                datasets : [
-                                    {
-                                        label: supportingStatType,
-                                        data: getSlicedData().map(data => {
-                                            if (supportingStatType == 'MP') return Number(data[supportingStatType].slice(0,2));
-                                            else return data[supportingStatType];
-                                        }),
-                                        backgroundColor: 'rgb(174, 177, 183)'
-                                    }
-                                ]
-                            }}
-                            options={{
-                                plugins: {
-                                    legend: {
-                                        display: false
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: `Supporting Stats - ${supportingStatType == 'MP' ? 'Minutes Played' : supportingStatType}`,
-                                        font: {
-                                            size: 30
-                                        },
-                                        padding: 30
-                                    },
-                                    datalabels: {
-                                        anchor: 'end',
-                                        align: 'top',
-                                        color: 'white',
-                                        font: {
-                                            weight: 'bold'
-                                        },
-                                        formatter: (value) => value
-                                    }
-                                }
-                            }}
-                            width={1200}
-                        />
-                    </div>
-                </div>
+
 
                 <div className='stats-container' id='chart2'>
                     <div className='stats'>
                         <Bar 
                             data={{
-                                labels: getSlicedData().map(data => [data.Date, `${data.Home ? data.Home : ""} ${data.Opp}`]),
+                                labels: getSlicedData().map(data => [data.Date, `${data.Location ? data.Location : ""} ${data.Opp}`]),
                                 datasets : [
                                     {
                                         label: statType,
-                                        data: getSlicedData().map(data => {
-                                            if (statType.length <= 3) return data[statType] ;
-                                            else if (statType.length == 11) return data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)];
-                                            else return data[statType.slice(0, 3)] + data[statType.slice(4, 7)];
-                                        }),
+                                        data: getSlicedData().map(data => data[statType]),
                                         backgroundColor: getSlicedData().map(data => {
-                                                if (statType.length <= 3) {
-                                                    if (data[statType] > line){
-                                                        if (overOrUnder == '>') return 'green';
-                                                        else return 'red';
-                                                    }
-                                                    else if (data[statType] < line){
-                                                        if (overOrUnder == '>') return 'red';
-                                                        else return 'green';
-                                                    } else return 'gray';
-                                                    } else if (statType.length == 11){
-                                                        if ((data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) > line){
-                                                            if (overOrUnder == '>') return 'green';
-                                                            else return 'red';
-                                                        } 
-                                                        else if ((data[statType.slice(0,3)] + data[statType.slice(4,7)] + data[statType.slice(8, 11)]) < line){
-                                                            if (overOrUnder == '>') return 'red';
-                                                            else return 'green';
-                                                        }
-                                                        else return "gray"
-                                                } else {
-                                                    if (data[statType.slice(0, 3)] + data[statType.slice(4, 7)] > line){
-                                                        if (overOrUnder == '>') return 'green';
-                                                        else return 'red';
-                                                    } else if (data[statType.slice(0, 3)] + data[statType.slice(4, 7)] < line ){
-                                                        if (overOrUnder == '>') return 'red';
-                                                        else return 'green';
-                                                    } else return 'gray'
-                                                }
+                                            if (data[statType] > line){
+                                                if (overOrUnder == '>') return 'green';
+                                                else return 'red';
+                                            }
+                                            else if (data[statType] < line){
+                                                if (overOrUnder == '>') return 'red';
+                                                else return 'green';
+                                            } else return 'gray';
                                          })
                                     }
                                 ]
@@ -326,28 +277,98 @@ export default function PlayerStats() {
                     <div className='stats-container' id='buttons'>
                         <div className='filters'>
                             <div className='stat-type' id='bar'>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="PTS" className={`stat-button${statType == "PTS" ? '-active' : ""}`} id='PTS'>PTS</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="TRB" className={`stat-button${statType == "TRB" ? '-active' : ""}`} id='REB'>REB</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="AST" className={`stat-button${statType ==  "AST" ? '-active' : ""}`} id='AST'>AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="3P" className={`stat-button${statType == "3P" ? '-active' : ""}`} id='3PM'>3PM</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="STL" className={`stat-button${statType ==  "STL" ? '-active' : ""}`} id='STL'>STL</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="BLK" className={`stat-button${statType == "BLK" ? '-active' : ""}`} id='BLK'>BLK</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="PTS+AST" className={`stat-button${statType == "PTS+AST" ? '-active' : ""}`} id='PTS_AST'>PTS + AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="PTS+TRB" className={`stat-button${statType == "PTS+TRB" ? '-active' : ""}`} id='PTS_REB'>PTS + REB</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="TRB+AST" className={`stat-button${statType == "TRB+AST" ? '-active' : ""}`} id='REB_AST'>REB + AST</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="PTS+TRB+AST" className={`stat-button${statType == "PTS+TRB+AST" ? '-active' : ""}`} id='PTS_REB_AST'>P + R + A</button>
-                                <button onClick={(button) => setStatType(button.target.value) }
-                                value="STL+BLK" className={`stat-button${statType == "STL+BLK" ? '-active' : ""}`} id='STL_BLK'>STL + BLK</button>
+                                <div className='position-slider'>
+                                    <button id='receiving' onClick={() => setPositionSlider('Receiving')} className={`stat-button${positionSlider == 'Receiving' ? 'active' : ''}`}>RECEIVING</button>
+                                    <button id='rushing' onClick={() => setPositionSlider('Rushing')} className={`stat-button${positionSlider == 'Rushing' ? 'active' : ''}`}>RUSHING</button>
+                                    <button id='passing' onClick={() => setPositionSlider('Passing')} className={`stat-button${positionSlider == 'Passing' ? 'active' : ''}`}>PASSING</button>
+                                </div>
+
+                                { positionSlider == 'Receiving' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    if (position == 'QB') setLine(0.5);
+                                    if (position == 'RB') setLine(21.5);
+                                    else setLine(60.5);
+                                } }
+                                value={position == 'WR' ? 'MainYds' : 
+                                    position == 'RB' ? 'RBRecYds/WRRushYds' :
+                                    'Other'
+                                } className={`stat-button${(statType == "MainYds") && (position == 'WR') || statType == 'RBRecYds/WRRushYds' && (position != 'WR') || statType == 'Other' ? '-active' : ""}`} id='YDS'>YDS</button> : ''}   
+
+                                { positionSlider == 'Receiving' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    if (position == 'RB') setLine(2.5);
+                                    else if (position == 'WR') setLine(4.5);
+                                    else setLine(0.5);
+                                } }
+                                value="Rec" className={`stat-button${statType == "Rec" ? '-active' : ""}`} id='REC'>REC</button> : ''}
+
+                                { positionSlider == 'Receiving' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(0.5);
+                                } }
+                                value={position == 'WR' ? "MainTD" : 
+                                    position == 'RB' ? 'WRRushTD/QBRushTD/RBRecTD' :
+                                    'Other2'
+                                } className={`stat-button${statType ==  "MainTD" && (position == 'WR')|| statType ==  "WRRushTD/QBRushTD/RBRecTD" && (position != 'WR') || statType ==  "Other2" ? '-active' : ""}`} id='TD'>TD</button> : ''}  
+
+                                { positionSlider == 'Rushing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    if (position == 'RB') setLine(60.5);
+                                    if (position == 'WR') setLine(2.5);
+                                    if (position == 'QB') setLine(22.5);
+                                } }
+                                value={position == 'RB' ? 'MainYds' :
+                                    position == 'QB' ? 'QBRushYds' :
+                                    'RBRecYds/WRRushYds'
+                                } className={`stat-button${statType ==  "RBRecYds/WRRushYds" || statType == 'QBRushYds' || (statType ==  "MainYds") && (position == 'RB')  ? '-active' : ""}`} id='RUSHYDS'>YDS</button> : ''}
+
+                                { positionSlider == 'Rushing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    if (position == 'RB') setLine(14.5);
+                                    else if (position == 'QB') setLine(5.5);
+                                    else setLine (1.5);
+                                } }
+                                value={position == 'WR' || position == 'RB' ? "Att" : "QBRushAtt"} className={`stat-button${statType == "Att" && (position == 'RB')|| statType == 'QBRushAtt' ? '-active' : ""}`} id='ATT'>ATT</button> : ''}   
+
+                                { positionSlider == 'Rushing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(0.5);
+                                } }
+                                value={position == 'RB' ? 'MainTD' :
+                                    'WRRushTD/QBRushTD/RBRecTD'
+                                } className={`stat-button${statType ==  "WRRushTD/QBRushTD/RBRecTD" || (statType == 'MainTD') && (position == 'RB') ? '-active' : ""}`} id='RUSHTD'>TD</button> : ''}
+
+                                { positionSlider == 'Passing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(220.5);
+                                } }
+                                value={position == 'QB' ? 'MainYds' : 'Other3'}  className={`stat-button${(statType == "MainYds") && (position == 'QB') || statType == 'Other3' ? '-active' : ""}`} id='PASSYDS'>YDS</button> : ''}  
+
+                                { positionSlider == 'Passing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(21.5);
+                                } }
+                                value="Cmp" className={`stat-button${statType == "Cmp" ? '-active' : ""}`} id='CMP'>CMP</button> : ''}   
+
+                                { positionSlider == 'Passing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(33.5);
+                                } }
+                                value={position == 'QB' ? 'Att' : 'Other'} className={`stat-button${statType == "Att" && (position == 'QB') || statType == 'Other' ? '-active' : ""}`} id='PASSATT'>ATT</button> : ''}
+
+                                { positionSlider == 'Passing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(1.5);
+                                } }
+                                value={position == 'QB' ? 'MainTD' : 'Other2'}  className={`stat-button${statType == "MainTD" || statType == 'Other2' ? '-active' : ""}`} id='PASSTD'>TD</button>: ''}
+
+                                { positionSlider == 'Passing' ? <button onClick={(button) => {
+                                    setStatType(button.target.value);
+                                    setLine(0.5);
+                                } }
+                                value="Int" className={`stat-button${statType == "Int" ? '-active' : ""}`} id='INT'>INT</button>: ''}                            
+                                
+
                             </div>
                             <div className='stat-type' id='last-games'>
                                 <button onClick={event => setNumOfGames(event.target.value)} value="5"
@@ -360,7 +381,7 @@ export default function PlayerStats() {
                                     <button id='over' onClick={() => setOverOrUnder('>')} className={`${overOrUnder == '>' ? 'active-ou' : 'inactive-ou'}`}>O</button>
                                     <button id='under' onClick={() => setOverOrUnder('<')} className={`${overOrUnder == '<' ? 'active-ou' : 'inactive-ou'}`}>U</button>
                                     <select value={line} name='line' id='line' onChange={event => setLine(event.target.value)}>
-                                        {[...Array(60)].map((_, i) => {
+                                        {[...Array(320)].map((_, i) => {
                                             const val = (i + 0.5);
                                             return (
                                                 <option key={val} value={val}>{val}</option>
@@ -390,8 +411,6 @@ export default function PlayerStats() {
                                     <form className={showFilters ? 'show-form' : 'hide-form'} onSubmit={handleFilterSubmit}>
                                         <label htmlFor='opponent' className={`filter${showFilters ? "-show" : ""}`}>Opponent:</label>
                                         <input type='text' placeholder='TOR' id='opponent' name='opponent' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setOpponentInput(event.target.value)}></input>
-                                        <label htmlFor='minutes' className={`filter${showFilters ? "-show" : ""}`}>Minutes Played:</label>
-                                        <input type='number' placeholder='30' id='minutes' name='minutes' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setMinutesInput(event.target.value)}></input>
                                         <label htmlFor='homeAway' className={`filter${showFilters ? "-show" : ""}`}>Home or Away:</label>
                                         <input type='text' placeholder='Home' id='homeAway' name='homeAway' className={`filter${showFilters ? "-show" : ""}`} onChange={event => setHomeAwayInput(event.target.value)}></input>
                                         <button type="submit" className='filter'></button>

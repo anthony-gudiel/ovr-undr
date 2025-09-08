@@ -18,6 +18,9 @@ export default function LandingMain(props) {
                 highlighting how players have performed against the line in recent games.</h3>
                 <Search 
                     onClick = {props.handleSearch}
+                    league={props.league}
+                    changeToNba={props.changeToNba} 
+                    changeToNfl={props.changeToNfl}
                 />
             </div>
 

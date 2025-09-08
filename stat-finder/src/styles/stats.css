@@ -335,3 +335,11 @@ small {
     color: white;
 }
 
+#receiving, #rushing, #passing {
+    width: fit-content;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    background-color: white;
+    font-size: large;
+}
