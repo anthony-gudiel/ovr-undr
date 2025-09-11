@@ -59,7 +59,6 @@ export default function NflPlayerStats() {
             setLine(220.5);
         };
         
-        // Reset headshot year to 2024 when player changes
         setHeadshotYear(2024);
     }, [playerData])
 
@@ -197,6 +196,45 @@ export default function NflPlayerStats() {
         });
     }
 
+    function getDisplayName(stat){
+        if (stat == 'Rec') return "REC";
+        if (position == 'WR'){
+            if (stat == 'MainYds') return 'REC YDS';
+            else if (stat == 'MainTD') return 'REC TD';
+            else if (stat == 'RBRecYds/WRRushYds') return 'RUSH YDS'
+            else if (stat == 'Att') return 'RUSH ATT';
+            else if (stat == 'WRRushTD/QBRushTD/RBRecTD') return 'RUSH TD';
+            else if (stat == 'Other3') return 'PASS YDS (Unavailable)' ;
+            else if (stat == 'Cmp') return 'CMP (Unavailable)';
+            else if (stat == 'Other2') return 'PASS TD (Unavailable)';
+            else if (stat == 'Other') return 'PASS ATT (Unavailable)';
+            else if (stat == 'Int') return 'INT (Unavailable)';
+        } else if (position == 'RB'){
+            if (stat == 'MainYds') return 'RUSH YDS';
+            else if (stat == 'MainTD') return 'RUSH TD';
+            else if (stat == 'RBRecYds/WRRushYds') return 'REC YDS';
+            else if (stat == 'Att') return 'RUSH ATT';
+            else if (stat == 'WRRushTD/QBRushTD/RBRecTD') return 'REC TD';
+            else if (stat == 'Other3') return 'PASS YDS (Unavailable)' ;
+            else if (stat == 'Cmp') return 'CMP (Unavailable)';
+            else if (stat == 'Other') return 'PASS ATT (Unavailable)';
+            else if (stat == 'Other2') return 'PASS TD (Unavailable)';
+            else if (stat == 'Int') return 'INT (Unavailable)';
+        }else {
+            if (stat == 'MainYds') return 'PASS YDS';
+            else if (stat == 'MainTD') return 'PASS TD';
+            else if (stat == 'Att') return 'PASS ATT';
+            else if (stat == 'Cmp') return 'CMP';
+            else if (stat == 'Int') return 'INT';
+            else if (stat == 'WRRushTD/QBRushTD/RBRecTD') return 'RUSH TD';
+            else if (stat == 'Other') return 'REC YDS (Unavailable)';
+            else if (stat == 'Rec') return 'REC'
+            else if (stat == 'Other2') return 'REC TD (Unavailable)' 
+            else if (stat == 'QBRushYds') return 'RUSH YDS';
+            else if (stat == 'QBRushAtt') return 'RUSH ATT';
+        }
+    }
+
 
 
     return (
@@ -250,7 +288,7 @@ export default function NflPlayerStats() {
                                     },
                                     title: {
                                         display: true,
-                                        text: `${newPlayerData[0].Name.replace('_', ' ')} - ${statType}`,
+                                        text: `${newPlayerData[0].Name.replace('_', ' ')} - ${getDisplayName(statType)}`,
                                         font: {
                                             size: 30
                                         },
@@ -328,7 +366,7 @@ export default function NflPlayerStats() {
                                     else if (position == 'QB') setLine(5.5);
                                     else setLine (1.5);
                                 } }
-                                value={position == 'WR' || position == 'RB' ? "Att" : "QBRushAtt"} className={`stat-button${statType == "Att" && (position == 'RB')|| statType == 'QBRushAtt' ? '-active' : ""}`} id='ATT'>ATT</button> : ''}   
+                                value={position == 'WR' || position == 'RB' ? "Att" : "QBRushAtt"} className={`stat-button${statType == "Att" && (position == 'RB' || position == 'WR')|| statType == 'QBRushAtt' ? '-active' : ""}`} id='ATT'>ATT</button> : ''}   
 
                                 { positionSlider == 'Rushing' ? <button onClick={(button) => {
                                     setStatType(button.target.value);
