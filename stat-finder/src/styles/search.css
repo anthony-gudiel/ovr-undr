@@ -4,4 +4,10 @@
 
 .active-logo, .inactive-logo {
     background-color: white;
+    height: 58px;
+    width: auto; 
+    cursor: pointer;
+    margin-top: 50px;
+    border: none;
+    padding: 10px; 
 }
