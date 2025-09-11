@@ -5,7 +5,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`, req.query);
+    next();
+});
 
 const config = {
     host: process.env.DB_HOST,
@@ -95,5 +104,5 @@ app.get('/nfl-test', (req, res) => {
     res.send('Server is running');
 });
 
-const port = 5000;
+const port = 3000;
 app.listen(port, () => console.log(`Running on port ${port}`));

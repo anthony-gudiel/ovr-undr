@@ -56,8 +56,8 @@ function App() {
             + userPlayerSearch.substring(spaceIndex + 1, userPlayerSearch.length);   
         }
 
-        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;  
-        const url2 = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/nfl-player?name=${encodeURIComponent(userPlayerSearch)}`;  
+        const url = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/player?name=${encodeURIComponent(userPlayerSearch)}`;  
+        const url2 = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/nfl-player?name=${encodeURIComponent(userPlayerSearch)}`;  
 
 
         formElement.reset();
