@@ -4,24 +4,24 @@ A React-based web application that helps users make more informed betting decisi
 
 ## Features
 
-### 🏀 Player Statistics Dashboard
+### Player Statistics Dashboard
 - Search for NBA players by name
 - View comprehensive game-by-game performance history
 - Interactive bar charts showing player stats vs. betting lines
 - Color-coded visualization (green/red) indicating over/under performance
 
-### 📊 Multiple Stat Categories
+### Multiple Stat Categories
 - **Individual Stats**: Points (PTS), Rebounds (TRB), Assists (AST), 3-Pointers (3P), Steals (STL), Blocks (BLK)
 - **Combined Stats**: PTS+AST, PTS+REB, REB+AST, PTS+REB+AST, STL+BLK
 - **Supporting Stats**: Minutes Played, Fouls, Field Goal Attempts, 3-Point Attempts, Free Throw Attempts
 
-### 🔍 Advanced Filtering
+### Advanced Filtering
 - **Opponent Filter**: See performance against specific teams
 - **Minutes Filter**: Filter games by minimum minutes played
 - **Game Range**: View Last 5 (L5) or Last 10 (L10) games
 - **Home/Away**: Filter by game location
 
-### 📈 Interactive Charts
+### Interactive Charts
 - Main performance chart with betting line overlay
 - Supporting statistics chart
 - Pagination through game history
